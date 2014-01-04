@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Syntax for search terms</title>
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="title" content="Knuth Search Engine" />
+    <meta name="creator" content="Lukas Prokop" />
+    <meta name="description" content="Search engine for educational documents" />
+    <meta name="language" content="en" />
+    <meta name="robots" content="all" />
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="static/style.css" />
+    <!-- TODO: RSS feed -->
+  </head>
+
+  <body>
+    <nav class="subpage">
+      <p id="top">
+        <a href="browse">Browse</a>
+        <a href="list">List</a>
+        <a href="news">Recently uploaded</a>
+        <a href="create">Upload</a>
+        <a href="impressum">Impressum</a>
+        <a href="faq">F.A.Q</a>
+      </p>
+    </nav>
+
+    <article>
+      <h1>Syntax</h1>
+
+      <p>
+        The following examples illustrate normal search patterns.
+        You can combine them by concatenating them with a space.
+        The first search pattern gets more importance than the
+        last one.
+      </p>
+
+      <table cellpadding="10">
+        <tr>
+          <td>word</td>
+          <td>Search for "word"</td>
+        </tr>
+        <tr>
+          <td>/word/</td>
+          <td>Search with Regular Expression "word" (allowed
+            <a href="http://us2.php.net/manual/en/reference.pcre.pattern.modifiers.php">modifiers</a>:
+            ixU). Only / as delimiter accepted.
+          </td>
+        </tr>
+        <tr>
+          <td>word1 word2</td>
+          <td>Search for "word1" or "word2"</td>
+        </tr>
+        <tr>
+          <td>word1 + word2</td>
+          <td>Search for "word1" and "word2"</td>
+        </tr>
+        <tr>
+          <td>"word"</td>
+          <td>Search for exact phrase "word"</td>
+        </tr>
+      </table>
+
+      <h3>Search using fields</h3>
+
+      <!-- TODO: Way too complex -->
+      <p>
+        A field consists of a key-value-pair in a notation " key:value".
+        An example is " lang:de"; searching only for german documents.
+        If the value consists of multiple words, you have to use quotes
+        (', ") to combine them. An example is " author:'Stu dent'".
+        Attention! Quotes for a single word will be an "exact phrase
+        match" (eg. " author:'student'").
+      </p>
+
+      <h3>Search for meta data</h3>
+      <table cellpadding="10">
+        <tr style="font-weight:bold">
+          <td>key</td>
+          <td>value description</td>
+        </tr>
+        <tr>
+          <td>lang</td>
+          <td>The language in
+            <a href="http://www.loc.gov/standards/iso639-2/php/code_list.php">ISO 639-1:2002</a>
+            as a string. Eg. "en" or "de"
+          </td>
+        </tr>
+        <tr>
+          <td>course</td>
+          <td>
+            A string representing the title of a course (or each first
+            letter of a title). Eg. "GDI"
+          </td>
+        </tr>
+        <tr>
+          <td>author</td>
+          <td>A string naming the author. Eg. "meisterluk"</td>
+        </tr>
+        <tr>
+          <td>license</td>
+          <td class="in_dev">
+            A string describing the license of the document (or License-ID;
+            see upload page HTML source). Eg. "GPL" <br>
+            Note: Only works good for main software licenses (GPL, BSD)
+            and Creative Commons
+          </td>
+        </tr>
+        <tr>
+          <td>file</td>
+          <td>The filename of the main document</td>
+        </tr>
+      </table>
+
+      <h3>Search with general information</h3>
+      <table cellpadding="10">
+        <tr style="font-weight:bold">
+          <td>key</td>
+          <td>value description</td>
+        </tr>
+        <tr>
+          <td>filetype</td>
+          <td>
+            A string describing the file extension (mostly three-letters string).
+            Eg. "txt" or "tex"
+          </td>
+        </tr>
+        <tr>
+          <td>assoc</td>
+          <td>A boolean value, stating existence of an associated document</td>
+        </tr>
+      </table>
+
+      <h3 class="in_dev">Specify appearence</h3>
+      <table cellpadding="10">
+        <tr style="font-weight:bold">
+          <td>key</td>
+          <td>value description</td>
+        </tr>
+        <tr>
+          <td>list</td>
+          <td>
+            An integer (between 1 and 30) specifying the number of displayed
+            search matches. Defaults to 12.
+          </td>
+        </tr>
+        <tr>
+          <td>page</td>
+          <td>
+            An integer (greater than 0) specifying the ID for results page.
+            Eg. " list:10 page:2" displays matches #11 to #20. Defaults to 1.
+          </td>
+        </tr>
+      </table>
+      <p><a href="#top">Back to Top</a></p>
+    </article>
+  </body>
+</html>

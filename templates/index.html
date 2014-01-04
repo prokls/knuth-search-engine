@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Knuth Search Engine</title>
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="title" content="Knuth Search Engine" />
+    <meta name="creator" content="Lukas Prokop, Andi" />
+    <meta name="description" content="Search engine for educational documents" />
+    <meta name="language" content="en" />
+    <meta name="robots" content="all" />
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="static/style.css" />
+    <!-- TODO: RSS feed -->
+  </head>
+
+  <body>
+    <article id="search">
+      <form action="search.php" method="get">
+        <p>
+          <object type="image/svg+xml" data="static/img/logo/logo.svg" width="250">
+            <img src="img/logo/logo.png" alt="knuth.">
+          </object>
+        </p>
+        <p>
+          <input type="text" name="q" id="userinput" placeholder="Search for document …"><br>
+          <input type="submit" value="Start search">
+        </p>
+        <nav>
+          <p style="text-align:left">
+            <a href="syntax">Syntax</a>
+            <a href="list">List</a>
+            <a href="news">Recently uploaded</a>
+            <a href="create">Upload</a>
+            <a href="impressum">Impressum</a>
+            <a href="faq">F.A.Q</a>
+          </p>
+        </nav>
+      </form>
+    </article>
+  </body>
+</html>

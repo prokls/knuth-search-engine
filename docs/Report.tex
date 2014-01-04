@@ -1,0 +1,85 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+
+\author{
+    Lukas Prokop,
+    Andi
+}
+\title{Digital library system in flask}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Technology involved}
+%
+\begin{description}
+  \item[Python]
+    Our programming language in charge (version 2.7 is used).
+  \item[Flask]
+    Flask is a python micro-webframework written by Armin Ronacher.
+    It features a very simple and basic API to provide web content easily
+    and is extensible by plugins.
+  \item[SQLAlchemy]
+    SQLAlchemy is used as database binding (object relational mapped)
+    to a postgresql database.
+  \item[PostgreSQL]
+    We have decided in favor of postgresql as our database system.
+  \item[Jinja2]
+    This is our template engine (equivalently its template language).
+  \item[Elastic search]
+    Provides search capabilities to our dataset.
+\end{description}
+
+\section{How to set it up}
+%
+\begin{enumerate}
+  \item Run \texttt{virtualenv .} and \texttt{. bin/activate}
+        as described at \href{http://flask.pocoo.org/docs/installation/#installation}%
+        {Flask's installation page}.
+  \item Run \texttt{pip install Flask} and \texttt{pip install elasticsearch}
+        to install those packages for this repository locally.
+  \item Run \texttt{python index.py} in the project's root directory to start the web application.
+  \item Visit \url{http://localhost:5000/}.
+\end{enumerate}
+
+\section{Database layout}
+%
+We only use two tables. One table is called \emph{documents} which registers all documents. Attributes are:
+\begin{description}
+  \item[id] A basic integer primary key.
+  \item[type] Which kind of document this is (e.g. ``doc'', ``attach'', ``comment'')
+  \item[title] Title of the document
+  \item[author] Who created this document?
+  \item[timestamp] When was this document created?
+\end{description}
+
+Our second table stores various metadata, which attributes also its name \emph{metadata}.
+\begin{description}
+  \item[document] Which document is this metadata associated with?
+  \item[key] An arbitrary key like \texttt{pdf.author} for the author in the metadata field of the PDF file.
+  \item[value] The corresponding value for the given \texttt{key} of \texttt{document}.
+\end{description}
+
+\section{How to use it}
+%
+The requirements state that browsing, searching, inserting and presenting documents must be possible.
+This corresponds to the following pages of the web application.
+\begin{description}
+  \item[Browsing]
+    Documents can be browsed in the listing. You have to visit the list page.
+  \item[Searching]
+    Main (start) page. You can enter various search queries to retrieve documents from the dataset.
+    The set of possible search queries is listed at the syntax page.
+  \item[Inserting]
+    The insertion can be done by visiting the upload page.
+  \item[Presenting]
+    Each document (and its associated documents) are presented on a separate page.
+\end{description}
+
+\end{document}

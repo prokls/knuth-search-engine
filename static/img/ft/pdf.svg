@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100"
+   height="100"
+   id="svg3857"
+   version="1.1"
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="New document 5">
+  <defs
+     id="defs3859">
+    <linearGradient
+       id="linearGradient4384">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop4386" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="1"
+         id="stop4388" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4384"
+       id="linearGradient4390"
+       x1="27.441175"
+       y1="998.04547"
+       x2="27.441175"
+       y2="976.71179"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       id="filter4466">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.28046328"
+         id="feGaussianBlur4468" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.44"
+     inkscape:cx="50"
+     inkscape:cy="50"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="748"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3862">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-952.36217)">
+    <path
+       style="color:#000000;fill:none;stroke:#787878;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 20.220589,963.57538 34.742646,0 27.022059,26.65444 0,52.57348 -61.764705,0 z"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       style="fill:none;stroke:#787878;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1"
+       d="M 55.330882,11.213235 81.801471,37.683824 C 74.44853,35.843748 67.095588,30.997626 59.742647,34.007353 62.737722,27.302447 56.856086,18.822198 55.330882,11.213235 z"
+       id="path4375"
+       inkscape:connector-curvature="0"
+       transform="translate(0,952.36217)"
+       sodipodi:nodetypes="cccc" />
+    <rect
+       style="color:#000000;fill:url(#linearGradient4390);stroke:#c10000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;fill-opacity:1"
+       id="rect4382"
+       width="43.933823"
+       height="15.625"
+       x="7.1691175"
+       y="976.99451"
+       ry="5.8823528" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4392"
+       style="font-size:8px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(11.213235,956.03864)"><flowRegion
+         id="flowRegion4394"><rect
+           id="rect4396"
+           width="49.632355"
+           height="23.713236"
+           x="4.5955882"
+           y="20.955883" /></flowRegion><flowPara
+         id="flowPara4398"
+         style="font-size:12px;fill:#ffffff;fill-opacity:1">PDF</flowPara></flowRoot>    <path
+       style="color:#000000;fill:none;stroke:#000000;stroke-width:1.89999998000000003;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;filter:url(#filter4466)"
+       d="m 52.941177,1038.0239 c 0.305662,3.4641 4.185224,-1.175 4.788908,-3.3556 2.071306,-7.4816 3.839517,-15.3583 5.881356,-22.8618 0.883272,-3.2459 -3.509268,-4.9215 -3.157154,-1.2128 0.514545,2.7366 2.703351,4.809 4.080415,7.1518 3.043252,4.0607 6.892678,7.5156 11.261767,10.0973 3.264586,0.6411 2.271182,-4.579 -1.057085,-2.9802 -6.994768,3.3601 -14.009496,6.5438 -20.46889,10.7913 -0.381566,0.239 -1.368886,1.9216 -1.329317,2.37 z"
+       id="path4400-6"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssscccscs" />
+    <path
+       style="fill:none;stroke:#ff0017;stroke-width:1.89999998000000003;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;color:#000000;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 52.389705,1037.4725 c 0.305661,3.4641 4.185223,-1.175 4.788907,-3.3556 2.071306,-7.4816 3.839517,-15.3583 5.881357,-22.8618 0.883272,-3.2459 -3.509269,-4.9215 -3.157155,-1.2128 0.514545,2.7366 2.703352,4.809 4.080416,7.1518 3.043252,4.0607 6.892678,7.5156 11.261767,10.0973 3.264586,0.6411 2.271182,-4.579 -1.057085,-2.9802 -6.994768,3.3601 -14.009497,6.5438 -20.468891,10.7913 -0.381566,0.239 -1.368885,1.9216 -1.329316,2.37 z"
+       id="path4400"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ssscccscs" />
+  </g>
+</svg>
