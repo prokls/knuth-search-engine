@@ -24,6 +24,7 @@ Dependencies
 
 * `PostgreSQL <http://www.postgresql.org/>`_ (RDBMS, DB)
 * `Elastic search <http://www.elasticsearch.org/>`_ (search engine)
+* `PyPDF2 <https://github.com/mstamy2/PyPDF2>`_ (pdf metadata extraction)
 
 greets,
 prokls
