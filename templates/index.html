@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Knuth Search Engine</title>
-    <meta http-equiv="Content-Type" content="text/html" />
-    <meta name="title" content="Knuth Search Engine" />
-    <meta name="creator" content="Lukas Prokop, Andi" />
-    <meta name="description" content="Search engine for educational documents" />
-    <meta name="language" content="en" />
-    <meta name="robots" content="all" />
-    <link rel="shortcut icon" href="img/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="static/style.css" />
-    <!-- TODO: RSS feed -->
-  </head>
+{% set pagetitle = "Document repository" %}
+{% include 'head.html' %}
+{% block head %}{% endblock %}
 
   <body>
     <article id="search">
@@ -26,16 +16,8 @@
           <input type="text" name="q" id="userinput" placeholder="Search for document …"><br>
           <input type="submit" value="Start search">
         </p>
-        <nav>
-          <p style="text-align:left">
-            <a href="{{ url_for('syntax') }}">Syntax</a>
-            <a href="{{ url_for('list') }}">List</a>
-            <a href="{{ url_for('news') }}">Recently uploaded</a>
-            <a href="{{ url_for('create') }}">Upload</a>
-            <a href="{{ url_for('impressum') }}">Impressum</a>
-            <a href="{{ url_for('faq') }}">F.A.Q</a>
-          </p>
-        </nav>
+{% include 'nav.html' %}
+{% block nav %}{% endblock %}
       </form>
     </article>
   </body>

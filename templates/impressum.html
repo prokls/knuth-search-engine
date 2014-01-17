@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Impressum</title>
-    <meta http-equiv="Content-Type" content="text/html" />
-    <meta name="title" content="Knuth Search Engine" />
-    <meta name="creator" content="Lukas Prokop, Andi" />
-    <meta name="description" content="Search engine for educational documents" />
-    <meta name="language" content="en" />
-    <meta name="robots" content="all" />
-    <link rel="shortcut icon" href="img/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="static/style.css" />
-    <!-- TODO: RSS feed -->
-  </head>
+{% set pagetitle = "Impressum" %}
+{% include 'head.html' %}
+{% block head %}{% endblock %}
 
   <body>
     <nav class="subpage">
