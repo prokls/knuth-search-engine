@@ -12,46 +12,14 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from datetime import datetime
-from flask.ext.sqlalchemy import SQLAlchemy
+from database import Document
+from database import Metadata
+from database import db
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1445@localhost/knuth_db';
 
-db = SQLAlchemy(app);
-
-class Document(db.Model):
-    __tablename__ = "documents"
-    id = db.Column(db.Integer, primary_key = True)
-    type = db.Column(db.String(20))
-    title = db.Column(db.String(256))
-    author = db.Column(db.String(40))
-    timestamp = db.Column(db.Integer)
-    parent = db.Column(db.Integer)
-
-    def __init__(self):
-        print 'Document:' % (self.id)
-        
-    def __repr__(self):
-        return self.title
-
-    def getDate(self):
-        datetime_obj = datetime.utcfromtimestamp(self.timestamp)
-        return datetime_obj.strftime('%Y-%m-%d')
-
-class Metadata(db.Model):
-    __tablename__ = "metadata"
-    id = db.Column(db.Integer, primary_key = True)
-    document = db.Column(db.Integer)
-    key = db.Column(db.String(40))
-    value = db.Column(db.Text)
-
-    def __init__(self):
-        print 'Metadata:' % (self.id)
-        
-    def __repr__(self):
-        return self.key
-
+db.init_app(app)
 
 
 @app.route('/faq')
@@ -75,6 +43,7 @@ def create(methods=['GET', 'POST']):
 
 
 @app.route('/browse')
+@app.route('/list/', defaults={'page' : 0})
 @app.route('/list/<int:page>')
 def list(page=0, methods=['GET']):
     # 1. request data from DB
