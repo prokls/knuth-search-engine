@@ -67,6 +67,11 @@ def delete(doc_id, methods=['DELETE']):
     return render_template('doc.html', doc_id=doc_id)
 
 
+@app.route('/news')
+def news():
+    return ''
+
+
 @app.route('/doc/<int:doc_id>')
 def doc(doc_id):
     document = Document.query.filter_by(id=doc_id).first()

@@ -17,12 +17,12 @@
   <body>
     <nav class="subpage">
       <p id="top">
-        <a href="browse">Browse</a>
-        <a href="list">List</a>
-        <a href="news">Recently uploaded</a>
-        <a href="create">Upload</a>
-        <a href="impressum">Impressum</a>
-        <a href="faq">F.A.Q</a>
+        <a href="{{ url_for('main') }}">Search</a>
+        <a href="{{ url_for('browse') }}">Browse</a>
+        <a href="{{ url_for('news') }}">Recently uploaded</a>
+        <a href="{{ url_for('create') }}">Upload</a>
+        <a href="{{ url_for('impressum') }}">Impressum</a>
+        <a href="{{ url_for('faq') }}">F.A.Q</a>
       </p>
     </nav>
 
