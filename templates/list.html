@@ -29,27 +29,21 @@
             <h1>Documents</h1>
           
               <table>
-                  <tr><th>Title</th><th>Author</th><th>Type</th><th>Upload</th><th>Parent</th></tr>
-                {% for id in documents %}
-                {% set doc = documents[id] %}
+                  <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
+                {% for doc in documents.values() %}
                 {% set parent = documents[doc.parent|string()] %}
-                <tr>
+                <tr class="doctype_{{ doc.type }}">
                     <td>
                         <a href="{{ url_for('doc', doc_id=doc.id) }}">{% print doc.title %}</a>
+                        {% if parent != null %}
+                        [<a href="{{ url_for('doc', doc_id=parent.id) }}">doc</a>]
+                        {% endif %}
                     </td>
                     <td>
                         {% print doc.author %}
                     </td>
                     <td>
-                        {% print doc.type %}
-                    </td>
-                    <td>
                         {% print doc.getDate() %}
-                    </td>
-                    <td>
-                        {% if parent != null %}
-                        <a href="{{ url_for('doc', doc_id=parent.id) }}">{% print parent.title %}</a>
-                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

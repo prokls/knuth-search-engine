@@ -36,7 +36,8 @@ class Document(db.Model):
         return self.title
 
     def getDate(self):
-        return datetime.utcfromtimestamp(self.timestamp)
+        datetime_obj = datetime.utcfromtimestamp(self.timestamp)
+        return datetime_obj.strftime('%Y-%m-%d')
 
 class Metadata(db.Model):
     __tablename__ = "metadata"
