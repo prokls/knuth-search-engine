@@ -1,22 +1,10 @@
-<!DOCTYPE html>
-<html>
-{% set pagetitle = "Submit a new document" %}
-{% include 'head.html' %}
-{% block head %}{% endblock %}
+{%- set page = 'impressum' -%}
+{%- extends 'base.html' -%}
 
-  <body>
-    <nav class="subpage">
-      <p id="top">
-        <a href="{{ url_for('syntax') }}">Syntax</a>
-        <a href="{{ url_for('main') }}">Search</a>
-        <a href="{{ url_for('list') }}">List</a>
-        <a href="{{ url_for('news') }}">Recently uploaded</a>
-        <a href="{{ url_for('impressum') }}">Impressum</a>
-        <a href="{{ url_for('faq') }}">F.A.Q</a>
-      </p>
-    </nav>
-    <article>
-      <h1>Impressum</h1>
+{%- block title %}Submit a new document{% endblock -%}
+
+{% block content %}
+      <h1 class="topspace">Impressum</h1>
 
       <h3>Project lead and maintenance</h3>
       <address>
@@ -28,22 +16,4 @@
       <p>
         All users are solely responsible for their own content.
       </p>
-
-<!--
-      <ul>
-        <li>
-          <a href="http://lukas-prokop.at/person">
-            lukas-prokop.at
-          </a>
-        </li>
-        <li>mail: admin (at) lukas-prokop (.) at</li>
-        <li>Jabber:
-          <a href="xmpp://meisterluk@jabber.grml.org/Home">
-            meisterluk@jabber.grml.org/Home
-          </a>
-        </li>
-      </ul>
--->
-    </article>
-  </body>
-</html>
+{% endblock%}

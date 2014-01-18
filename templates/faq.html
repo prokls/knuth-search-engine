@@ -1,26 +1,13 @@
-<!DOCTYPE html>
-<html>
-{% set pagetitle = "Frequently Asked Questions" %}
-{% include 'head.html' %}
-{% block head %}{% endblock %}
+{%- set page = 'faq' -%}
+{%- extends 'base.html' -%}
 
-  <body>
-    <nav class="subpage">
-      <p id="top">
-        <a href="{{ url_for('main') }}">Search</a>
-        <a href="{{ url_for('syntax') }}">Syntax</a>
-        <a href="{{ url_for('list') }}">Browse</a>
-        <a href="{{ url_for('news') }}">Recently uploaded</a>
-        <a href="{{ url_for('create') }}">Upload</a>
-        <a href="{{ url_for('impressum') }}">Impressum</a>
-      </p>
-    </nav>
+{%- block title %}Frequently Asked Questions{% endblock -%}
 
-    <article>
-      <h1>Frequently Asked Questions</h1>
+{% block content %}
+      <h1 class="topspace">Frequently Asked Questions</h1>
 
       <h3>Who runs this search engine?</h3>
-      <p>See <a href="impressum.html">impressum</a>.</p>
+      <p>See <a href="{{ url_for('impressum') }}">impressum</a>.</p>
 
       <h3 name="which-docs" id="which-docs">
         What document are supposed to be uploaded?
@@ -90,13 +77,11 @@
         Well, actually I have designed my own syntax before. I was aware
         of the need of "terms", "intervalls" and "key-value-pairs". Those
         were my initial implementation targets. You will find those elements
-        as "term", "range" and "field" in <a href="syntax">Syntax</a> again.
+        as "term", "range" and "field" in <a href="{{ url_for('syntax') }}">Syntax</a> again.
         However... I stole the symbols (:, ") from search engines like
         Google, Yahoo and wolframalpha, because I wanted to keep as
         user-friendly as possible.
       </p>
 
       <p><a href="#top">Back to Top</a></p>
-    </article>
-  </body>
-</html>
+{% endblock%}

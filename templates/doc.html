@@ -1,49 +1,29 @@
-<!DOCTYPE html>
-<html>
-{% set pagetitle = "Document #{{ doc_id }}" %}
-{% include 'head.html' %}
-{% block head %}{% endblock %}
+{%- set page = 'doc' -%}
+{%- extends 'base.html' -%}
 
-	<body>
-		<nav class="subpage">
-	      <p id="top">
-	        <a href="{{ url_for('main') }}">Search</a>
-	        <a href="{{ url_for('list') }}">List</a>
-	        <a href="{{ url_for('news') }}">Recently uploaded</a>
-	        <a href="{{ url_for('create') }}">Upload</a>
-	        <a href="{{ url_for('impressum') }}">Impressum</a>
-	        <a href="{{ url_for('faq') }}">F.A.Q</a>
-	      </p>
-	    </nav>
-	    <article>
-			<h1>Document</h1>
-	      
-            {% if filepath.endswith('.bib') %}
-              <img src="{{ url_for('static', filename='img/ft/bib.svg') }}" alt="BibTeX file" />
-            {% elif filepath.endswith('.pdf') %}
-              <img src="{{ url_for('static', filename='img/ft/pdf.svg') }}" alt="PDF file" />
-            {% endif %}
+{%- block title %}Document #{{ doc_id }}{% endblock -%}
 
-	      	<table>
-	      		<tr><th>Title</th><th>Author</th><th>Type</th></tr>
-			    <tr>
-			    	<td>
-			    		{% print document.title %}
-			    	</td>
-			    	<td>
-			    		{% print document.author %}
-			    	</td>
-			    	<td>
-			    		{% print document.type %}
-			    	</td>
-			    </tr>
-			   
-		    </table>
-		    
-		    {% for md in metadata %}
-		    {% print md.value %}
-		    {% endfor %}
-		    
-	    </article>
-  	</body>
-</html>
+{% block content %}
+    <h1 class="topspace">Document</h1>
+
+    {% if filepath.endswith('.bib') %}
+      <img src="{{ url_for('static', filename='img/ft/bib.svg') }}" alt="BibTeX file" />
+    {% elif filepath.endswith('.pdf') %}
+      <img src="{{ url_for('static', filename='img/ft/pdf.svg') }}" alt="PDF file" />
+    {% endif %}
+
+    <dl>
+      <dt>Title</dt>
+        <dd>{{ document.title }}</dd>
+
+      <dt>Author</dt>
+        <dd>{{ document.author }}</dd>
+
+      <dt>Type</dt>
+        <dd>{{ document.type }}</dd>
+    </dl>
+    
+    {% for md in metadata %}
+    {{ md.value }}
+    {% endfor %}
+{% endblock%}

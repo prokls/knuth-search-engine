@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+{%- block head %}
+  <head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="application-name" content="Knuth Search Engine" />
+    <meta name="author" content="Lukas Prokop, Andreas Schulhofer" />
+    <meta name="description" content="Search engine for educational documents" />
+    <meta name="robots" content="all" />
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for new documents" href="{{ url_for('news') }}" />
+  </head>
+{% endblock %}
+
+  <body id="top">
+    <article id="{{ page }}_page">
+{%- block article %}
+{%- block search %}
+      <p>
+        <object type="image/svg+xml" data="{{ url_for('static', filename='/img/logo/logo.svg') }}" width="250">
+          <img src="{{ url_for('static', filename='img/logo/logo.png') }}" alt="knuth." />
+        </object>
+      </p>
+      <form action="search.php" method="get">
+        <p>
+          <input type="text" name="q" id="userinput" placeholder="Search for document …"><br>
+          <input type="submit" value="Start search">
+        </p>
+      </form>
+{% endblock %}
+
+{%- block nav %}
+    <nav{% if page != 'main' %} class="subpage"{% endif %}>
+      <p id="top">
+{% if page != 'main'      %}         <a href="{{ url_for('main') }}">Search</a>{% endif %}
+{% if page != 'list'      %}         <a href="{{ url_for('list') }}">List</a>{% endif %}
+{% if page != 'news'      %}         <a href="{{ url_for('news') }}">News</a>{% endif %}
+{% if page != 'info'      %}         <a href="{{ url_for('info') }}">Syntax</a>{% endif %}
+{% if page != 'create'    %}         <a href="{{ url_for('create') }}">Upload</a>{% endif %}
+{% if page != 'impressum' %}         <a href="{{ url_for('impressum') }}">Impressum</a>{% endif %}
+{% if page != 'faq'       %}         <a href="{{ url_for('faq') }}">F.A.Q</a>{% endif %}
+      </p>
+    </nav>
+{%- endblock %}
+
+{%- block content -%}
+{%- endblock -%}
+{%- endblock %}
+    </article>
+  </body>
+</html>

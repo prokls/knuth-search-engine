@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html>
-{% set pagetitle = "Document repository" %}
-{% include 'head.html' %}
-{% block head %}{% endblock %}
+{%- extends 'base.html' -%}
+{%- block title %}Document repository search{% endblock -%}
 
-  <body>
-    <article id="search">
-      <form action="search.php" method="get">
+{% block article %}
+
+      <form action="{{ url_for('main') }}" method="get">
         <p>
           <object type="image/svg+xml" data="static/img/logo/logo.svg" width="250">
             <img src="img/logo/logo.png" alt="knuth.">
@@ -16,9 +13,16 @@
           <input type="text" name="q" id="userinput" placeholder="Search for document …"><br>
           <input type="submit" value="Start search">
         </p>
-{% include 'nav.html' %}
-{% block nav %}{% endblock %}
       </form>
-    </article>
-  </body>
-</html>
+
+      <nav>
+        <p>
+          <a href="{{ url_for('list') }}">List</a>
+          <a href="{{ url_for('news') }}">Recently uploaded</a>
+          <a href="{{ url_for('info') }}">Syntax</a>
+          <a href="{{ url_for('create') }}">Upload</a>
+          <a href="{{ url_for('impressum') }}">Impressum</a>
+          <a href="{{ url_for('faq') }}">F.A.Q</a>
+        </p>
+      </nav>
+{% endblock %}

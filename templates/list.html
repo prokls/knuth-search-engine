@@ -1,43 +1,33 @@
-<!DOCTYPE html>
-<html>
-{% set pagetitle = "Browsing documents" %}
-{% include 'head.html' %}
-{% block head %}{% endblock %}
+{%- set page = 'list' -%}
+{%- extends 'base.html' -%}
 
-    <body>
-        <nav class="subpage">
-          <p id="top">
-            <a href="{{ url_for('main') }}">Search</a>
-            <a href="{{ url_for('news') }}">Recently uploaded</a>
-            <a href="{{ url_for('create') }}">Upload</a>
-            <a href="{{ url_for('impressum') }}">Impressum</a>
-            <a href="{{ url_for('faq') }}">F.A.Q</a>
-          </p>
-        </nav>
-        <article>
-            <h1>Documents</h1>
-          
-              <table>
-                  <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
-                {% for doc in documents.values() %}
-                {% set parent = documents[doc.parent|string()] %}
-                <tr class="doctype_{{ doc.type }}">
-                    <td>
-                        <a href="{{ url_for('doc', doc_id=doc.id) }}">{% print doc.title %}</a>
-                        {% if parent != null %}
-                        [<a href="{{ url_for('doc', doc_id=parent.id) }}">doc</a>]
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% print doc.author %}
-                    </td>
-                    <td>
-                        {% print doc.getDate() %}
-                    </td>
-                </tr>
-                {% endfor %}
-            
-            </table>
-        </article>
-      </body>
-</html>
+{%- block title %}Browsing documents{% endblock -%}
+
+{% block content %}
+    <h1 class="topspace">Documents</h1>
+
+    <table>
+      <thead>
+        <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
+      </thead>
+      <tbody>
+{% for doc in documents.values() -%}
+{% set parent = documents[doc.parent|string()] %}
+        <tr class="doctype_{{ doc.type }}">
+          <td>
+            <a href="{{ url_for('doc', doc_id=doc.id) }}">{{ doc.title }}</a>
+{%- if parent %}
+            [<a href="{{ url_for('doc', doc_id=parent.id) }}">doc</a>]
+{%- endif %}
+          </td>
+          <td>
+            {{ doc.author }}
+          </td>
+          <td>
+            {{ doc.getDate() }}
+          </td>
+        </tr>
+{% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

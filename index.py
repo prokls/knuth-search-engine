@@ -18,7 +18,9 @@ from database import Metadata
 from database import db
 
 import os.path
+import elasticsearch
 
+es = elasticsearch.Elasticsearch()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1445@localhost/knuth_db';
 
