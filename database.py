@@ -20,6 +20,9 @@ class Document(db.Model):
 
     def getDate(self):
         return datetime.utcfromtimestamp(self.timestamp)
+    
+    def getFormatDateString(self):
+        return self.getDate().strftime('%Y-%m-%d')
 
 class Metadata(db.Model):
     __tablename__ = "metadata"
