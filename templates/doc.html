@@ -3,16 +3,48 @@
 
 {%- block title %}Document #{{ doc_id }}{% endblock -%}
 
+{# input=metadata   output={meta, tags} #}
+{% set meta = [] %}
+{% set tags = [] %}
+{% for md in metadata %}
+{%   if md.key == 'tag' %}
+{%     do tags.append(md.value) %}
+{%   else %}
+{%     do meta.append([md.key, md.value]) %}
+{%   endif %}
+{% endfor %}
+
 {% block content %}
     <h1 class="topspace">Document</h1>
+{% if filepath.endswith('.bib') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/bib.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/bib.png') }}" alt="BibTeX file" />
+      </object>
+{% elif filepath.endswith('.pdf') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/pdf.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/pdf.png') }}" alt="PDF file" />
+      </object>
+{% elif filepath.endswith('.tex') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/tex.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/tex.png') }}" alt="TeX file" />
+      </object>
+{% elif filepath.endswith('.txt') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/txt.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/txt.png') }}" alt="Text file" />
+      </object>
+{% else %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/generic.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/generic.png') }}" alt="Generic file" />
+      </object>
+{% endif %}
 
-    {% if filepath.endswith('.bib') %}
-      <img src="{{ url_for('static', filename='img/ft/bib.svg') }}" alt="BibTeX file" />
-    {% elif filepath.endswith('.pdf') %}
-      <img src="{{ url_for('static', filename='img/ft/pdf.svg') }}" alt="PDF file" />
-    {% endif %}
+    <div class="tags">
+{% for tag in tags %}
+      <span class="tag">{{ tag }}</span>
+{% endfor %}
+    </div>
 
-    <dl>
+    <dl style="clear:both">
       <dt>Title</dt>
         <dd>{{ document.title }}</dd>
 
@@ -21,9 +53,15 @@
 
       <dt>Type</dt>
         <dd>{{ document.type }}</dd>
+
+{% set blacklist = ['filename', 'fileext'] %}
+{% for key, value in meta %}
+{% if key not in blacklist %}
+      <dt>{{ key }}</dt>
+        <dd>{{ value }}</dd>
+{% endif %}
+{% endfor %}
     </dl>
-    
-    {% for md in metadata %}
-    {{ md.value }}
-    {% endfor %}
+
+
 {% endblock%}

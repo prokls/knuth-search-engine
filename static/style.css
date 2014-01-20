@@ -42,6 +42,12 @@
   thead {
     background-color: #DDD;
   }
+  dl {
+    text-align: left;
+  }
+  dt {
+    font-weight: bold;
+  }
   small {
     font-weight: normal;
   }
@@ -61,7 +67,7 @@
   h5 { color: #DB3; }
   h6 { color: #FA4; }
 
-  input[input!="file"] {
+  input[type="text"], input[type="submit"] {
     font-family: "Courier New", Courier, monospace;
     background-color: #FE9;
 
@@ -72,7 +78,7 @@
     background-color: #FA4;
   }
   input[type="submit"] {
-    background-color: none;
+    background-color: transparent;
     font-family: "Georgia", sans-serif;
     height: auto;
     /*padding: inherit;*/
@@ -80,7 +86,7 @@
 
 
   /* page specific definitions */
-  body#uploadpage,  {
+  body#uploadpage {
     background-image: url(img/bg/upload.png);
   }
   body#uploadpage .article {
@@ -134,9 +140,6 @@
     min-width: 250px;
     padding: 20px;
     border-radius: 10px;
-    -moz-border-radius: 10px;
-    -o-border-radius: 10px;
-    -webkit-border-radius: 10px;
   }
   article {
     text-align: center;
@@ -146,14 +149,8 @@
     margin-top: 50px;
     padding: 20px;
     border-radius: 10px;
-    -moz-border-radius: 10px;
-    -o-border-radius: 10px;
-    -webkit-border-radius: 10px;
     border: 3px solid #CB3;
     box-shadow: 3px 3px 5px #330;
-    -moz-box-shadow: 3px 3px 5px #330;
-    -o-box-shadow: 3px 3px 5px #330;
-    -webkit-box-shadow: 3px 3px 5px #330;
   }
   article input#userinput {
     width: 70%;
@@ -175,6 +172,13 @@
   }
   .attached_doc input {
     float: left;
+  }
+  .tag {
+    border-radius: 5px;
+    background-color: #FEA;
+    margin: 2px;
+    padding: 5px;
+    font-size: 11px;
   }
   .topspace {
     clear: both;
