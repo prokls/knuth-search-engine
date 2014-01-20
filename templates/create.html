@@ -9,11 +9,11 @@
       <form action="{{ url_for('create') }}" enctype="multipart/form-data" method="post">
         <p>
           <input type="hidden" name="doc_id" value="{{ id or 0 }}" />
-{% if id == 0 or not filename %}
+{%- if id == 0 or not filename %}
           <input type="file" name="doc" />
-{% else %}
+{%- else %}
           {{ filename }}
-{% endif %}
+{%- endif %}
           <input type="submit" name="op" value="Upload" />
         </p>
         <table id="metadata">
@@ -35,15 +35,15 @@
         <fieldset style="margin-top:30px" id="attachments">
           <legend>Associated documents</legend>
 
-{% if attachments %}
+{%- if attachments %}
           <table style="margin-bottom:10px" class="colored_table">
-{% for attach in attachments %}
+{%- for attach in attachments %}
             <tr style="margin-top:5px">
               <td>{% if attach.title %}“{{ attach.title }}”{% endif %}</td><td>{{ attach.author }}</td>
             </tr>
-{% endfor %}
+{%- endfor %}
           </table>
-{% endif %}
+{%- endif %}
 
           <div class="attached_doc">
             <input type="text" name="attach_title" maxsize="256" placeholder="title..." style="width:30%" />

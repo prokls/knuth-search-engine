@@ -11,8 +11,8 @@
         <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
       </thead>
       <tbody>
-{% for doc in documents.values() -%}
-{% set parent = documents[doc.parent|string()] %}
+{%- for doc in documents.values() %}
+{%- set parent = documents[doc.parent|string()] %}
         <tr class="doctype_{{ doc.type }}">
           <td>
             <a href="{{ url_for('doc', doc_id=doc.id) }}">{{ doc.title }}</a>
@@ -27,7 +27,7 @@
             {{ doc.getFormatDateString() }}
           </td>
         </tr>
-{% endfor %}
+{%- endfor %}
       </tbody>
     </table>
 {% endblock %}

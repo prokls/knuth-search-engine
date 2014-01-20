@@ -3,56 +3,70 @@
 
 {%- block title %}Document #{{ id }}{% endblock -%}
 
-{% block content %}
+{%- block content %}
     <h1 class="topspace">Document</h1>
-      <a href="{{ url_for('download', filename=filename) }}">
-{% if filepath.endswith('.bib') %}
-        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/bib.svg') }}" width="250">
-          <img src="{{ url_for('static', filename='img/ft/bib.png') }}" alt="BibTeX file" />
-        </object>
-{% elif filepath.endswith('.pdf') %}
-        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/pdf.svg') }}" width="250">
-          <img src="{{ url_for('static', filename='img/ft/pdf.png') }}" alt="PDF file" />
-        </object>
-{% elif filepath.endswith('.tex') %}
-        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/tex.svg') }}" width="250">
-          <img src="{{ url_for('static', filename='img/ft/tex.png') }}" alt="TeX file" />
-        </object>
-{% elif filepath.endswith('.txt') %}
-        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/txt.svg') }}" width="250">
-          <img src="{{ url_for('static', filename='img/ft/txt.png') }}" alt="Text file" />
-        </object>
-{% else %}
-        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/generic.svg') }}" width="250">
-          <img src="{{ url_for('static', filename='img/ft/generic.png') }}" alt="Generic file" />
-        </object>
-{% endif %}
-    </a>
+     <a href="{{ url_for('download', filename=filename) }}">
+{%- if filename.endswith('.bib') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/bib.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/bib.png') }}" alt="BibTeX file" />
+      </object>
+{%- elif filename.endswith('.pdf') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/pdf.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/pdf.png') }}" alt="PDF file" />
+      </object>
+{%- elif filename.endswith('.tex') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/tex.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/tex.png') }}" alt="TeX file" />
+      </object>
+{%- elif filename.endswith('.txt') %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/txt.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/txt.png') }}" alt="Text file" />
+      </object>
+{%- else %}
+      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/generic.svg') }}" width="250">
+        <img src="{{ url_for('static', filename='img/ft/generic.png') }}" alt="Generic file" />
+      </object>
+{%- endif %}
+     </a>
 
     <div class="tags">
-{% for tag in tags %}
+{%- for tag in tags %}
       <span class="tag">{{ tag }}</span>
-{% endfor %}
+{%- endfor %}
     </div>
 
     <dl style="clear:both">
+{%- if title %}
       <dt>Title</dt>
-        <dd>{{ document.title }}</dd>
+        <dd>{{ title }}</dd>
+{%- endif %}
 
+{%- if author %}
       <dt>Author</dt>
-        <dd>{{ document.author }}</dd>
+        <dd>{{ author }}</dd>
+{%- endif %}
 
+{%- if type %}
       <dt>Type</dt>
-        <dd>{{ document.type }}</dd>
+        <dd>{{ type }}</dd>
+{%- endif %}
 
-{% set blacklist = ['filename', 'fileext'] %}
-{% for key, value in meta %}
-{% if key not in blacklist %}
+{%- set blacklist = ['filename', 'fileext'] %}
+{%- for key, value in meta %}
+{%- if key not in blacklist %}
       <dt>{{ key }}</dt>
         <dd>{{ value }}</dd>
-{% endif %}
-{% endfor %}
+{%- endif %}
+{%- endfor %}
     </dl>
 
+{%- if attachments %}
+    <h3>Attachments</h3>
+    <ul>
+{%- for attach in attachments %}
+      <li>{{ attach.title }}</li>
+{%- endfor %}
+    </ul>
+{%- endif %}
 
 {% endblock%}
