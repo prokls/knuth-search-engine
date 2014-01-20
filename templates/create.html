@@ -1,19 +1,58 @@
-{%- set page = 'impressum' -%}
+{%- set page = 'create' -%}
 {%- extends 'base.html' -%}
 
 {%- block title %}Submit a new document{% endblock -%}
 
-{% block content %}
-      <h1 class="topspace">Impressum</h1>
+{% block article %}
+      <h1>Upload document</h1>
 
-      <h3>Project lead and maintenance</h3>
-      <address>
-        Lukas Prokop and Andi <br>
-        next to Infeldgasse <br>
-        8010 Graz
-      </address>
+      <form action="{{ url_for('create') }}" enctype="multipart/form-data" method="post">
+        <p>
+          <input type="hidden" name="doc_id" value="{{ id or 0 }}" />
+{% if id == 0 %}
+          <input type="file" name="doc" />
+{% else %}
+          {{ filename }}
+{% endif %}
+          <input type="submit" name="op" value="Upload" />
+        </p>
+        <table id="metadata">
+          <tr>
+            <td>Title:</td>
+            <td><input type="text" name="doc_title" maxsize="256" value="{{ title }}" /></td>
+          </tr>
+          <tr>
+            <td>Author:</td>
+            <td><input type="text" name="doc_author" maxsize="40" value="{{ author }}" /></td>
+          </tr>
+          <!-- TODO: license -->
+          <tr>
+            <td>Tags: <br /> <span style="font-size:small">(whitespace-separated)</span></td>
+            <td><input type="text" name="doc_tags" value="{{ tags|join(', ') }}" /></td>
+          </tr>
+        </table>
 
-      <p>
-        All users are solely responsible for their own content.
-      </p>
+        <fieldset style="margin-top:30px" id="attachments">
+          <legend>Associated documents</legend>
+
+{% if attachments %}
+          <table style="margin-bottom:10px" class="colored_table">
+{% for attach in attachments %}
+            <tr style="margin-top:5px">
+              <td>{% if attach.title %}“{{ attach.title }}”{% endif %}</td><td>{{ attach.author }}</td>
+            </tr>
+{% endfor %}
+          </table>
+{% endif %}
+
+          <div class="attached_doc">
+            <input type="text" name="attach_title" maxsize="256" placeholder="title..." style="width:30%" />
+            <input type="text" name="attach_author" maxsize="40" placeholder="author..." style="width:25%" />
+            <input type="file" name="attach_doc" style="width:35%" />
+          </div>
+          <p style="text-align: center">
+            <input type="submit" name="op" value="Attach" />
+          </p>
+        </fieldset>
+      </form>
 {% endblock%}

@@ -61,7 +61,7 @@
   h5 { color: #DB3; }
   h6 { color: #FA4; }
 
-  input {
+  input[input!="file"] {
     font-family: "Courier New", Courier, monospace;
     background-color: #FE9;
 
@@ -75,7 +75,7 @@
     background-color: none;
     font-family: "Georgia", sans-serif;
     height: auto;
-    padding: inherit;
+    /*padding: inherit;*/
   }
 
 
@@ -170,13 +170,32 @@
   .clear {
     clear: both;
   }
+  .attached_doc {
+    clear: both;
+  }
+  .attached_doc input {
+    float: left;
+  }
   .topspace {
     clear: both;
     border-top: 2px solid #CCC;
     margin-top: 80px;
     padding-top: 10px;
   }
+  .colored_table tr:nth-child(2n + 1) {
+    background-color: #FED;
+  }
+  .colored_table tr:hover {
+    background-color: #EFEEED;
+  }
+
   #syntax_page table {
     text-align: left;
+  }
+  #create_page {
+    text-align: left;
+  }
+  #create_page #metadata tr td:nth-child(1) {
+    font-weight: bold;
   }
 }
