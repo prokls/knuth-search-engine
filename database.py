@@ -5,7 +5,7 @@ db = SQLAlchemy()
 
 class Document(db.Model):
     __tablename__ = "documents"
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     type = db.Column(db.String(20))
     title = db.Column(db.String(256))
     author = db.Column(db.String(40))
@@ -35,10 +35,9 @@ class Document(db.Model):
 
 class Metadata(db.Model):
     __tablename__ = "metadata"
-    id = db.Column(db.Integer, primary_key = True)
-    document = db.Column(db.Integer)
-    key = db.Column(db.String(40))
-    value = db.Column(db.Text)
+    document = db.Column(db.Integer, primary_key=True)
+    key = db.Column(db.String(40), primary_key=True)
+    value = db.Column(db.Text, primary_key=True)
 
     def __init__(self, document, key, value=''):
         self.document = document
