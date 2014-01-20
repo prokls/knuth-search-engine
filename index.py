@@ -9,10 +9,9 @@
     (C) 10.12.25, 2013, Lukas Prokop, Andi
 """
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 from flask import redirect, abort, send_from_directory
 
-from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 
 from database import Document
@@ -116,11 +115,6 @@ def delete(doc_id, methods=['DELETE']):
     return render_template('doc.html', doc_id=doc_id, page='delete')
 
 
-def make_feed_url(doc_id):
-    doc_url = 'doc/' + str(doc_id)
-    url = urljoin(request.url_root, doc_url)
-    return url
-
 def make_feed_body(doc):
     feed_body = 'Title: ' + doc.title + \
                 '<br />Author: ' + doc.author + \
@@ -135,7 +129,7 @@ def create_feed():
         feed.add(doc.title, 
                  unicode(make_feed_body(doc)), 
                  content_type='html',
-                 url=make_feed_url(doc.id),
+                 url=url_for('doc', doc_id=doc.id),
                  updated=doc.getDate())
     
     return feed
