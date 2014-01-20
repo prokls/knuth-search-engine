@@ -5,27 +5,29 @@
 
 {% block content %}
     <h1 class="topspace">Document</h1>
+      <a href="{{ url_for('download', filename=filename) }}">
 {% if filepath.endswith('.bib') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/bib.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/bib.png') }}" alt="BibTeX file" />
-      </object>
+        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/bib.svg') }}" width="250">
+          <img src="{{ url_for('static', filename='img/ft/bib.png') }}" alt="BibTeX file" />
+        </object>
 {% elif filepath.endswith('.pdf') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/pdf.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/pdf.png') }}" alt="PDF file" />
-      </object>
+        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/pdf.svg') }}" width="250">
+          <img src="{{ url_for('static', filename='img/ft/pdf.png') }}" alt="PDF file" />
+        </object>
 {% elif filepath.endswith('.tex') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/tex.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/tex.png') }}" alt="TeX file" />
-      </object>
+        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/tex.svg') }}" width="250">
+          <img src="{{ url_for('static', filename='img/ft/tex.png') }}" alt="TeX file" />
+        </object>
 {% elif filepath.endswith('.txt') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/txt.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/txt.png') }}" alt="Text file" />
-      </object>
+        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/txt.svg') }}" width="250">
+          <img src="{{ url_for('static', filename='img/ft/txt.png') }}" alt="Text file" />
+        </object>
 {% else %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/generic.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/generic.png') }}" alt="Generic file" />
-      </object>
+        <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/generic.svg') }}" width="250">
+          <img src="{{ url_for('static', filename='img/ft/generic.png') }}" alt="Generic file" />
+        </object>
 {% endif %}
+    </a>
 
     <div class="tags">
 {% for tag in tags %}
