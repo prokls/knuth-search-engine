@@ -139,13 +139,15 @@ def upload_doc(filepath, doc_id):
     except KeyError:
         mimetype = None
 
-    # move uploaded to repository
-    file_path = os.path.join(UPLOAD_FOLDER, str(doc_id) + fileext)
+    new_filename = str(doc_id) + '.' + fileext
+    file_path = os.path.join(UPLOAD_FOLDER, new_filename)
+
+    # move uploaded file to repository
     filepath.save(file_path)
-    print('File {} stored.'.format(file_path))
+    print('File {} stored.'.format(new_filename))
 
     # store metadata entry: document=doc_id key='filename' value=file_path
-    filename_row = Metadata(doc_id, 'filename', str(doc_id) + fileext)
+    filename_row = Metadata(doc_id, 'filename', new_filename)
     db.session.add(filename_row)
 
     # store metadata entry: document=doc_id key='mimetype' value=mimetype

@@ -29,6 +29,7 @@ FEED_NUM_DOCUMENTS = 5
 
 es = elasticsearch.Elasticsearch()
 app = Flask(__name__)
+app.jinja_env.add_extension("jinja2.ext.do")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1445@localhost/knuth_db';
 
 db.init_app(app)
@@ -89,7 +90,8 @@ def create():
 
             # tags get inherited
             if data['attachment']['doc']:
-                at = document.create_attachment(doc_id, data['attach_title'],
+                at = document.create_attachment(doc_id,
+                        data['attachment']['title'],
                         data['attachment']['author'], data['tags'])
                 attach = document.upload_doc(data['attachment']['doc'], at)
                 print("Created attachment {}.".format(attach))
@@ -170,18 +172,16 @@ def news():
 
 @app.route('/doc/<int:doc_id>')
 def doc(doc_id):
-    document = Document.query.filter_by(id=doc_id).first()
-    metadata = Metadata.query.filter_by(document=doc_id).all()
-
-    doc_filename = ''
-    for filename in os.listdir('data'):
-        if filename.startswith(str(doc_id) + '.'):
-            doc_filename = filename
-            break
-    if not doc_filename:
+    doc_row = Document.query.filter_by(id=doc_id).first()
+    if not doc_row:
         abort(404)
     
-    return render_template('doc.html', **{'document' : document, 'metadata' : metadata, 'doc_id' : doc_id, 'filepath' : doc_filename, 'page': 'doc'})
+    metadata = Metadata.query.filter_by(document=doc_id).all()
+    doc_filename = document.get_filename(doc_id)
+
+    return render_template('doc.html', **{'document' : doc_row,
+        'metadata' : metadata, 'doc_id' : doc_id,
+        'filepath' : doc_filename})
 
 
 @app.route('/data/<filename>')

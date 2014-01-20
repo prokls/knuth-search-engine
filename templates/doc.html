@@ -1,18 +1,7 @@
 {%- set page = 'doc' -%}
 {%- extends 'base.html' -%}
 
-{%- block title %}Document #{{ doc_id }}{% endblock -%}
-
-{# input=metadata   output={meta, tags} #}
-{% set meta = [] %}
-{% set tags = [] %}
-{% for md in metadata %}
-{%   if md.key == 'tag' %}
-{%     do tags.append(md.value) %}
-{%   else %}
-{%     do meta.append([md.key, md.value]) %}
-{%   endif %}
-{% endfor %}
+{%- block title %}Document #{{ id }}{% endblock -%}
 
 {% block content %}
     <h1 class="topspace">Document</h1>
