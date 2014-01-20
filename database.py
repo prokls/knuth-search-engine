@@ -12,8 +12,16 @@ class Document(db.Model):
     timestamp = db.Column(db.Integer)
     parent = db.Column(db.Integer)
 
-    def __init__(self):
-        print 'Document:' % (self.id)
+    def __init__(self, type='doc', title='', author='', \
+                 timestamp=None, parent=None):
+        if not timestamp:
+            timestamp = int(datetime.now().strftime("%s"))
+
+        self.type = type
+        self.title = title
+        self.author = author
+        self.timestamp = timestamp
+        self.parent = parent
         
     def __repr__(self):
         return self.title
@@ -24,6 +32,7 @@ class Document(db.Model):
     def getFormatDateString(self):
         return self.getDate().strftime('%Y-%m-%d')
 
+
 class Metadata(db.Model):
     __tablename__ = "metadata"
     id = db.Column(db.Integer, primary_key = True)
@@ -31,8 +40,10 @@ class Metadata(db.Model):
     key = db.Column(db.String(40))
     value = db.Column(db.Text)
 
-    def __init__(self):
-        print 'Metadata:' % (self.id)
+    def __init__(self, document, key, value=''):
+        self.document = document
+        self.key = key
+        self.value = value
         
     def __repr__(self):
         return self.key

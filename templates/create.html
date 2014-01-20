@@ -9,7 +9,7 @@
       <form action="{{ url_for('create') }}" enctype="multipart/form-data" method="post">
         <p>
           <input type="hidden" name="doc_id" value="{{ id or 0 }}" />
-{% if id == 0 %}
+{% if id == 0 or not filename %}
           <input type="file" name="doc" />
 {% else %}
           {{ filename }}

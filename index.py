@@ -18,9 +18,10 @@ from database import Document
 from database import Metadata
 from database import db
 
-import feedparser
-import document
 import os.path
+import document
+import feedparser
+import collections
 import elasticsearch
 
 FEED_TITLE = 'Newest Uploads'
@@ -48,46 +49,67 @@ def info():
     return render_template('syntax.html', page='info')
 
 
+def normalize_data(form, files):
+    """Take userform from upload and return normalized data"""
+    return {
+      'op' : form['op'].lower(),
+      'id' : int(form['doc_id']),
+      'title' : form['doc_title'],
+      'author' : form['doc_author'],
+      'tags' : [tag for tag in form['doc_tags'].split() if tag],
+      'doc' : files['doc'],
+      'attachment' : {
+        'title' : form['attach_title'],
+        'author' : form['attach_author'],
+        'doc' : files['attach_doc']
+      }
+    }
+
+def create_empty_doc():
+    """Return an empty document for `create`."""
+    d = collections.defaultdict(lambda: '', {'doc_id' : 0})
+    return normalize_data(d, d)
+
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     """Create a new document (POST) or provide new document form."""
-    print(request.method, request.form)
     if request.method == 'POST':
-        data = {
-          'doc_id' : int(request.form['doc_id']),
-          'doc' : request.files['doc'],
-          'op' : request.form['op'].lower(),
-          'doc_title' : request.form['doc_title'],
-          'doc_author' : request.form['doc_author'],
-          'doc_tags' : request.form['doc_tags'],
-          'attach_title' : request.form['attach_title'],
-          'attach_author' : request.form['attach_author'],
-          'attach_doc' : request.files['attach_doc']
-        }
+        data = normalize_data(request.form, request.files)
 
-        if data['doc_id'] == 0:
-            tags = [tag for tag in data['doc_tags'].split() if tag]
-            doc_id = document.create_document(data['doc_title'], \
-              data['doc_author'], tags)
+        if data['id'] == 0:
+            doc_id = document.create_document(data['title'], \
+              data['author'], data['tags'])
+            print("Create new document.")
 
             if data['doc']:
-                document.upload_doc(data['doc'], doc_id)
+                filename = document.upload_doc(data['doc'], doc_id)
+            else:
+                filename = document.get_filename(doc_id)
+            print("New filename {}.".format(filename))
 
-            # tags are inherited
-            if data['attach_doc']:
+            # tags get inherited
+            if data['attachment']['doc']:
                 at = document.create_attachment(doc_id, data['attach_title'],
-                        data['attach_author'], tags)
-                document.upload_doc(data['attach_doc'], at)
+                        data['attachment']['author'], data['tags'])
+                attach = document.upload_doc(data['attachment']['doc'], at)
+                print("Created attachment {}.".format(attach))
         else:
             d = {'id': data['doc_id'], 'type': 'doc', 'title': data['doc_title'],
                  'author': data['doc_author']}
             document.update_document(data['doc_id'], **d)
             doc_id = data['doc_id']
-    else:
-        doc_id = 0
 
-    doc = document.retrieve_document(doc_id)
-    return render_template('create.html', **doc)
+        doc = document.retrieve_document(doc_id)
+    else:
+        # create empty document
+        doc = create_empty_doc()
+
+    op = request.form.get('op')
+
+    if not op or op == 'upload':
+        return render_template('create.html', **doc)
+    else:
+        return redirect(url_for('doc', doc_id=doc['id']))
 
 
 @app.route('/browse')
