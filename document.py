@@ -46,23 +46,38 @@ def create_document(title='', author='', tags=[], **kwargs):
     return new_doc.id
 
 
-def retrieve_document(doc_id):
+def retrieve_document(doc_id, with_attachments=True):
     """Retrieve document and all associated information using `doc_id`.
     Does not return attachments of attachment. Returns dict.
     """
+    doc = Document.query.filter_by(id=doc_id).first()
+    metadata = Metadata.query.filter_by(document=doc_id).all()
+    data = {'tags' : [], 'attachments' : []}
+    children = set([])
 
-    return {
-      'id': int(doc_id),
-      'type': 'doc',
-      'timestamp': 1240073752,
-      'author': 'Lukas Prokop',
-      'title': 'The typho typesetting system',
-      'filename': str(doc_id) + '.pdf',
-      'pdf.subject': 'Typho Typesetting',
-      'pdf.author': 'Lukas Prokop',
-      'tags': ['typesetting', 'knuth', 'tex'],
-      'attachments': [attach1, attach2]
-    }
+    # retrieve document data
+    for field in DOC_COLUMNS:
+        data[field] = getattr(doc, field)
+    data['id'] = int(data['id'])
+
+    # retrieve metadata
+    for entry in metadata:
+        if entry.key == 'tag':
+            data['tags'].append(entry.value)
+            continue
+        if not data.has_key(entry.key):
+            data[entry.key] = entry.value
+
+    # retrieve children
+    children = Document.query.filter_by(parent=doc_id).all()
+    for child in children:
+        data['attachments'].append(
+            document.retrieve_document(child.id, with_attachments=False)
+        )
+
+    data['filename'] = get_filename(doc_id)
+
+    return data
 
 
 def update_document(doc_id, **attributes):

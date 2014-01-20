@@ -150,8 +150,8 @@ def create_feed():
     newest_documents = Document.query.order_by(Document.timestamp).limit(FEED_NUM_DOCUMENTS).all()
     
     for doc in newest_documents:
-        feed.add(doc.title, 
-                 unicode(make_feed_body(doc)), 
+        feed.add(doc.title or '(no title given)',
+                 unicode(make_feed_body(doc)),
                  content_type='html',
                  url=url_for('doc', doc_id=doc.id),
                  updated=doc.getDate())
@@ -172,16 +172,11 @@ def news():
 
 @app.route('/doc/<int:doc_id>')
 def doc(doc_id):
-    doc_row = Document.query.filter_by(id=doc_id).first()
-    if not doc_row:
+    docu = document.retrieve_document(doc_id)
+    if not docu:
         abort(404)
     
-    metadata = Metadata.query.filter_by(document=doc_id).all()
-    doc_filename = document.get_filename(doc_id)
-
-    return render_template('doc.html', **{'document' : doc_row,
-        'metadata' : metadata, 'doc_id' : doc_id,
-        'filepath' : doc_filename})
+    return render_template('doc.html', **docu)
 
 
 @app.route('/data/<filename>')
