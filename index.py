@@ -52,24 +52,35 @@ def info():
 
 def normalize_data(form, files):
     """Take userform from upload and return normalized data"""
+    try:
+        doc_file = files['doc']
+    except KeyError:
+        doc_file = None
+    try:
+        attach_file = files['attach_doc']
+    except KeyError:
+        attach_file = None
+
     return {
       'op' : form['op'].lower(),
       'id' : int(form['doc_id']),
       'title' : form['doc_title'],
       'author' : form['doc_author'],
       'tags' : [tag for tag in form['doc_tags'].split() if tag],
-      'doc' : files['doc'],
+      'doc' : doc_file,
       'attachment' : {
         'title' : form['attach_title'],
         'author' : form['attach_author'],
-        'doc' : files['attach_doc']
+        'doc' : attach_file
       }
     }
+
 
 def create_empty_doc():
     """Return an empty document for `create`."""
     d = collections.defaultdict(lambda: '', {'doc_id' : 0})
     return normalize_data(d, d)
+
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
@@ -78,28 +89,31 @@ def create():
         data = normalize_data(request.form, request.files)
 
         if data['id'] == 0:
+            print('data[id] = 0')
+            print(data)
             doc_id = document.create_document(data['title'], \
               data['author'], data['tags'])
-            print("Create new document.")
-
-            if data['doc']:
-                filename = document.upload_doc(data['doc'], doc_id)
-            else:
-                filename = document.get_filename(doc_id)
-            print("New filename {}.".format(filename))
-
-            # tags get inherited
-            if data['attachment']['doc']:
-                at = document.create_attachment(doc_id,
-                        data['attachment']['title'],
-                        data['attachment']['author'], data['tags'])
-                attach = document.upload_doc(data['attachment']['doc'], at)
-                print("Created attachment {}.".format(attach))
         else:
-            d = {'id': data['doc_id'], 'type': 'doc', 'title': data['doc_title'],
-                 'author': data['doc_author']}
-            document.update_document(data['doc_id'], **d)
-            doc_id = data['doc_id']
+            d = {}
+            whitelist = ['id', 'title', 'author']
+            for key in whitelist:
+                if data[key]:
+                    d[key] = data[key]
+            print(d)
+            document.update_document(data['id'], **d)
+            doc_id = data['id']
+
+        if data['doc']:
+            filename = document.upload_doc(data['doc'], doc_id)
+        else:
+            filename = document.get_filename(doc_id)
+
+        # tags get inherited
+        if data['attachment']['doc']:
+            at = document.create_attachment(doc_id,
+                    data['attachment']['title'],
+                    data['attachment']['author'], data['tags'])
+            attach = document.upload_doc(data['attachment']['doc'], at)
 
         doc = document.retrieve_document(doc_id)
     else:
@@ -108,7 +122,7 @@ def create():
 
     op = request.form.get('op')
 
-    if not op or op == 'upload':
+    if not op or op == 'Attach':
         return render_template('create.html', **doc)
     else:
         return redirect(url_for('doc', doc_id=doc['id']))

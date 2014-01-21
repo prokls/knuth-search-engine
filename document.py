@@ -69,11 +69,12 @@ def retrieve_document(doc_id, with_attachments=True):
             data[entry.key] = entry.value
 
     # retrieve children
-    children = Document.query.filter_by(parent=doc_id).all()
-    for child in children:
-        data['attachments'].append(
-            document.retrieve_document(child.id, with_attachments=False)
-        )
+    if with_attachments:
+        children = Document.query.filter_by(parent=doc_id).all()
+        for child in children:
+            data['attachments'].append(
+                retrieve_document(child.id, with_attachments=False)
+            )
 
     data['filename'] = get_filename(doc_id)
 
@@ -83,6 +84,7 @@ def retrieve_document(doc_id, with_attachments=True):
 def update_document(doc_id, **attributes):
     """Update document data with updated attributes. Returns None."""
     doc = Document.query.filter_by(id=doc_id).first()
+    print('attributes', attributes)
     if doc:
         for attr, attr_value in attributes.iteritems():
             setattr(doc, attr, attr_value)
@@ -159,7 +161,6 @@ def upload_doc(filepath, doc_id):
 
     # move uploaded file to repository
     filepath.save(file_path)
-    print('File {} stored.'.format(new_filename))
 
     # store metadata entry: document=doc_id key='filename' value=file_path
     filename_row = Metadata(doc_id, 'filename', new_filename)
