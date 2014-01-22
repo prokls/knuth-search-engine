@@ -161,6 +161,10 @@
     text-decoration: none;
     border-bottom: 1px solid #A92;
   }
+  .noborderlink {
+    border-bottom: none medium !important;
+  }
+
   .uploadselect {
     text-align: center;
   }
@@ -172,6 +176,9 @@
   }
   .attached_doc input {
     float: left;
+  }
+  .filetype {
+    width: 150px;
   }
   .tag {
     border-radius: 5px;

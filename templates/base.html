@@ -24,7 +24,7 @@
           <img src="{{ url_for('static', filename='img/logo/logo.png') }}" alt="knuth." />
         </object>
       </p>
-      <form action="search.php" method="get">
+      <form action="{{ url_for('main') }}" method="get">
         <p>
           <input type="text" name="q" id="userinput" placeholder="Search for document …"><br>
           <input type="submit" value="Start search">

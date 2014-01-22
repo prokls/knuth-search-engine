@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
     knuth.document
@@ -21,31 +22,25 @@ import pdfminer.pdfdocument
 
 UPLOAD_FOLDER = 'data'
 
-DOC_COLUMNS = ['id', 'type', 'timestamp', 'author', 'timestamp', 'parent']
+DOC_COLUMNS = ['id', 'type', 'title', 'author', 'timestamp', 'parent']
 METADATA_COLUMNS = ['document', 'key', 'value']
-
-attach1 = {'id': 1, 'type': 'attach', 'timestamp': 1330073752,
-  'author': 'Andreas Schulhofer', 'title': 'An improvement',
-  'filename': '1.pdf', 'parent': None, 'tags': ['cs']}
-attach2 = {'id': 42, 'type': 'attach', 'timestamp': 1290023752,
-  'author': 'Bernd', 'title': 'Code review', 'filename': '42.pdf',
-  'parent': None, 'tags': ['cs']}
 
 
 def create_document(title='', author='', tags=[], **kwargs):
     """Define a new document in the database. Returns new ID."""
     # create new document
-    new_doc = Document(kwargs.get('type', 'doc'), title, author, \
-                       None, kwargs.get('parent'))
+    new_doc = Document(kwargs.get(u'type', u'doc'), title, author, \
+                       None, kwargs.get(u'parent'))
     db.session.add(new_doc)
     db.session.commit()  # retrieve new_doc.id
 
     # create new tags
     for tag in tags:
         if tag:
-            new_tag = Metadata(new_doc.id, 'tag', tag.strip())
-    db.session.commit()
+            new_tag = Metadata(new_doc.id, u'tag', tag.strip())
+            db.session.add(new_tag)
 
+    db.session.commit()
     return new_doc.id
 
 
@@ -55,7 +50,7 @@ def retrieve_document(doc_id, with_attachments=True):
     """
     doc = Document.query.filter_by(id=doc_id).first()
     metadata = Metadata.query.filter_by(document=doc_id).all()
-    data = {'tags' : [], 'attachments' : []}
+    data = {'tags' : [], 'attachments' : [], 'meta': {}}
     children = set([])
 
     # retrieve document data
@@ -69,7 +64,7 @@ def retrieve_document(doc_id, with_attachments=True):
             data['tags'].append(entry.value)
             continue
         if not data.has_key(entry.key):
-            data[entry.key] = entry.value
+            data['meta'][entry.key] = entry.value
 
     # retrieve children
     if with_attachments:
@@ -87,7 +82,6 @@ def retrieve_document(doc_id, with_attachments=True):
 def update_document(doc_id, **attributes):
     """Update document data with updated attributes. Returns None."""
     doc = Document.query.filter_by(id=doc_id).first()
-    print('attributes', attributes)
     if doc:
         for attr, attr_value in attributes.iteritems():
             setattr(doc, attr, attr_value)
@@ -173,12 +167,12 @@ def upload_doc(filepath, doc_id):
     filepath.save(file_path)
 
     # store metadata entry: document=doc_id key='filename' value=file_path
-    filename_row = Metadata(doc_id, 'filename', new_filename)
+    filename_row = Metadata(doc_id, u'filename', new_filename)
     db.session.add(filename_row)
 
     # store metadata entry: document=doc_id key='mimetype' value=mimetype
     if mimetype:
-        mimetype_row = Metadata(doc_id, 'mimetype', mimetype)
+        mimetype_row = Metadata(doc_id, u'mimetype', mimetype)
         db.session.add(mimetype_row)
 
     # retrieve metadata using pdfminer, if PDF
@@ -189,11 +183,15 @@ def upload_doc(filepath, doc_id):
             parser.set_document(doc)
             doc.initialize()
 
-            fields = ['Producer', 'Creator', 'Title', 'Keywords', 'Subject']
+            fields = [u'Producer', u'Creator', u'Title', u'Keywords', u'Subject']
             for key in fields:
                 try:
-                    keyname = 'pdf.' + key.lower()
-                    _add_metadata_row(doc_id, keyname, doc.info[0][key])
+                    keyname = u'pdf.' + key.lower()
+                    try:
+                        value = doc.info[0][key].decode('utf-16')
+                    except UnicodeDecodeError:
+                        continue
+                    _add_metadata_row(doc_id, keyname, value)
                 except KeyError:
                     pass
 
@@ -202,4 +200,4 @@ def upload_doc(filepath, doc_id):
 
     db.session.commit()
 
-    return '42.pdf'
+    return new_filename

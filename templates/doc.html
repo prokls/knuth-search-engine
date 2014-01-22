@@ -5,27 +5,17 @@
 
 {%- block content %}
     <h1 class="topspace">Document</h1>
-     <a href="{{ url_for('download', filename=filename) }}">
+     <a href="{{ url_for('download', filename=filename) }}" class="noborderlink">
 {%- if filename.endswith('.bib') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/bib.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/bib.png') }}" alt="BibTeX file" />
-      </object>
+      <img src="{{ url_for('static', filename='img/ft/bib.svg') }}" alt="BibTeX file" class="filetype" />
 {%- elif filename.endswith('.pdf') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/pdf.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/pdf.png') }}" alt="PDF file" />
-      </object>
+      <img src="{{ url_for('static', filename='img/ft/pdf.svg') }}" alt="PDF file" class="filetype" />
 {%- elif filename.endswith('.tex') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/tex.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/tex.png') }}" alt="TeX file" />
-      </object>
+      <img src="{{ url_for('static', filename='img/ft/tex.svg') }}" alt="TeX file" class="filetype" />
 {%- elif filename.endswith('.txt') %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/txt.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/txt.png') }}" alt="Text file" />
-      </object>
+      <img src="{{ url_for('static', filename='img/ft/txt.svg') }}" alt="Text file" class="filetype" />
 {%- else %}
-      <object type="image/svg+xml" data="{{ url_for('static', filename='img/ft/generic.svg') }}" width="250">
-        <img src="{{ url_for('static', filename='img/ft/generic.png') }}" alt="Generic file" />
-      </object>
+      <img src="{{ url_for('static', filename='img/ft/generic.svg') }}" alt="Generic file" class="filetype" />
 {%- endif %}
      </a>
 
@@ -52,7 +42,7 @@
 {%- endif %}
 
 {%- set blacklist = ['filename', 'fileext'] %}
-{%- for key, value in meta %}
+{%- for key, value in meta.items() %}
 {%- if key not in blacklist %}
       <dt>{{ key }}</dt>
         <dd>{{ value }}</dd>
@@ -60,16 +50,14 @@
 {%- endfor %}
     </dl>
 
-{#
 {%- if attachments %}
     <h3>Attachments</h3>
-    <ul>
+    <ul style="text-align:left">
 {%- for attach in attachments %}
-      <li>{{ attach.title }}</li>
+      <li><a href="{{ url_for('doc', doc_id=attach.id) }}">“{{ attach.title }}”</a></li>
 {%- endfor %}
     </ul>
 {%- endif %}
-#}
 
 
 {% endblock%}

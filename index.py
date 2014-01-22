@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
     knuth
@@ -10,7 +11,7 @@
 """
 
 from flask import Flask, render_template, request, url_for
-from flask import redirect, abort, send_from_directory
+from flask import request, redirect, abort, send_from_directory
 
 from werkzeug.contrib.atom import AtomFeed
 
@@ -20,6 +21,7 @@ from database import db
 
 import os.path
 import document
+import datetime
 import feedparser
 import collections
 import elasticsearch
@@ -89,8 +91,6 @@ def create():
         data = normalize_data(request.form, request.files)
 
         if data['id'] == 0:
-            print('data[id] = 0')
-            print(data)
             doc_id = document.create_document(data['title'], \
               data['author'], data['tags'])
         else:
@@ -99,7 +99,6 @@ def create():
             for key in whitelist:
                 if data[key]:
                     d[key] = data[key]
-            print(d)
             document.update_document(data['id'], **d)
             doc_id = data['id']
 
@@ -122,7 +121,7 @@ def create():
 
     op = request.form.get('op')
 
-    if not op or op == 'Attach':
+    if not op or op == u'Attach':
         return render_template('create.html', **doc)
     else:
         return redirect(url_for('doc', doc_id=doc['id']))
@@ -154,18 +153,19 @@ def delete(doc_id, methods=['DELETE']):
 
 
 def make_feed_body(doc):
-    feed_body = 'Title: ' + doc.title + \
-                '<br />Author: ' + doc.author + \
-                '<br />Upload: ' + doc.getFormatDateString()
+    feed_body = u'Title: ' + doc.title + \
+                 '<br />Author: ' + doc.author + \
+                 '<br />Upload: ' + doc.getFormatDateString()
     return feed_body
 
 def create_feed():
     feed = AtomFeed(FEED_TITLE, feed_url=request.url, url=request.url_root)
-    newest_documents = Document.query.order_by(Document.timestamp).limit(FEED_NUM_DOCUMENTS).all()
+    newest_documents = Document.query.order_by(Document.timestamp.desc()) \
+        .limit(FEED_NUM_DOCUMENTS).all()
     
     for doc in newest_documents:
-        feed.add(doc.title or '(no title given)',
-                 unicode(make_feed_body(doc)),
+        feed.add(doc.title or u'(no title given)',
+                 make_feed_body(doc),
                  content_type='html',
                  url=url_for('doc', doc_id=doc.id),
                  updated=doc.getDate())
@@ -181,6 +181,11 @@ def feed():
 def news():
     feed_str = create_feed().to_string()
     parsed_feed = feedparser.parse(feed_str)
+
+    for entry in parsed_feed['entries']:
+        dt = datetime.datetime.strptime(entry['updated'], '%Y-%m-%dT%H:%M:%SZ')
+        entry['updated'] = dt.strftime('%Y-%m-%d %H:%M')
+
     return render_template('news.html', **{'feed' : parsed_feed})
 
 
@@ -202,6 +207,10 @@ def download(filename):
 @app.route('/')
 @app.route('/search')
 def main():
+    query = request.args.get('q')
+    if query:
+        search_query = {'query': {'query_string': {'query': query}}}
+        print(es.search(doc_type='doc', size=50, index='knuth', q=query))
     return render_template('index.html', page='main')
 
 
