@@ -87,4 +87,34 @@ This corresponds to the following pages of the web application.
     Each document (and its associated documents) are presented on a separate page.
 \end{description}
 
+\section{Design decisions}
+%
+Technologically we have decided in favor of the Flask microframework,
+because it allows easy setup of a small web application. It might not
+be suitable for large web application with sophisticated user and content
+management, but satisfies our needs for this assignment.
+
+Concerning the database layout the requirement of a ``web-based institutional
+repository for theses, papers, books'' can be reduced to managing the abstract
+concept of ``documents''. So in general we do not distinguish between theses,
+papers and books and only store them in one relation called ``documents''.
+
+From the user perspective if the user wants to \emph{browse} documents,
+we offer him a list of all available documents. These documents are associated
+with their corresponding attachments by a parent-child relation. This way
+the user gets an overview with the central element of a ``document''.
+
+We decided to use the ElasticSearch storage engine to make search and retrieval
+as easy as possible. It furthermore emphasizes a Service-Oriented Architecture
+(SOA), because the search is maintained externally and data is retrieved by
+a network socket and JSON.
+
+Metadata like referenced articles in papers from PDFs cannot be extracted due
+to missing semantical information in PDF. We focused on retrieving the Producer,
+Creator (etc.) metadata fields which are part of the PDF standard. We use the
+\texttt{pdfminer} python package for this task.
+
+\texttt{pdfminer} is not supported in the python 3 branch and therefore we
+used python 2.7 as our development and production system.
+
 \end{document}
