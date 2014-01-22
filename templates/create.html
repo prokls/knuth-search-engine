@@ -1,59 +1,58 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Submit a new document</title>
-    <meta http-equiv="Content-Type" content="text/html" />
-    <meta name="title" content="Knuth Search Engine" />
-    <meta name="creator" content="Lukas Prokop, Andi" />
-    <meta name="description" content="Search engine for educational documents" />
-    <meta name="language" content="en" />
-    <meta name="robots" content="all" />
-    <link rel="shortcut icon" href="img/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="static/style.css" />
-    <!-- TODO: RSS feed -->
-  </head>
+{%- set page = 'create' -%}
+{%- extends 'base.html' -%}
 
-  <body>
-    <nav class="subpage">
-      <p id="top">
-        <a href="syntax">Syntax</a>
-        <a href="browse">Browse</a>
-        <a href="list">List</a>
-        <a href="news">Recently uploaded</a>
-        <a href="impressum">Impressum</a>
-        <a href="faq">F.A.Q</a>
-      </p>
-    </nav>
-    <article>
-      <h1>Impressum</h1>
+{%- block title %}Submit a new document{% endblock -%}
 
-      <h3>Project lead and maintenance</h3>
-      <address>
-        Lukas Prokop and Andi <br>
-        next to Infeldgasse <br>
-        8010 Graz
-      </address>
+{% block article %}
+      <h1>Upload document</h1>
 
-      <p>
-        All users are solely responsible for their own content.
-      </p>
+      <form action="{{ url_for('create') }}" enctype="multipart/form-data" method="post">
+        <p>
+          <input type="hidden" name="doc_id" value="{{ id or 0 }}" />
+{%- if id == 0 or not filename %}
+          <input type="file" name="doc" />
+{%- else %}
+          {{ filename }}
+{%- endif %}
+          <input type="submit" name="op" value="Upload" />
+        </p>
+        <table id="metadata">
+          <tr>
+            <td>Title:</td>
+            <td><input type="text" name="doc_title" maxsize="256" value="{{ title }}" /></td>
+          </tr>
+          <tr>
+            <td>Author:</td>
+            <td><input type="text" name="doc_author" maxsize="40" value="{{ author }}" /></td>
+          </tr>
+          <!-- TODO: license -->
+          <tr>
+            <td>Tags: <br /> <span style="font-size:small">(whitespace-separated)</span></td>
+            <td><input type="text" name="doc_tags" value="{{ tags|join(', ') }}" /></td>
+          </tr>
+        </table>
 
-<!--
-      <ul>
-        <li>
-          <a href="http://lukas-prokop.at/person">
-            lukas-prokop.at
-          </a>
-        </li>
-        <li>mail: admin (at) lukas-prokop (.) at</li>
-        <li>Jabber:
-          <a href="xmpp://meisterluk@jabber.grml.org/Home">
-            meisterluk@jabber.grml.org/Home
-          </a>
-        </li>
-      </ul>
--->
-    </article>
-  </body>
-</html>
+        <fieldset style="margin-top:30px" id="attachments">
+          <legend>Associated documents</legend>
+
+{%- if attachments %}
+          <table style="margin-bottom:10px" class="colored_table">
+{%- for attach in attachments %}
+            <tr style="margin-top:5px">
+              <td>{% if attach.title %}“{{ attach.title }}”{% endif %}</td><td>{{ attach.author }}</td>
+            </tr>
+{%- endfor %}
+          </table>
+{%- endif %}
+
+          <div class="attached_doc">
+            <input type="text" name="attach_title" maxsize="256" placeholder="title..." style="width:30%" />
+            <input type="text" name="attach_author" maxsize="40" placeholder="author..." style="width:25%" />
+            <input type="file" name="attach_doc" style="width:35%" />
+          </div>
+          <p style="text-align: center">
+            <input type="submit" name="op" value="Attach" />
+          </p>
+        </fieldset>
+      </form>
+{% endblock%}

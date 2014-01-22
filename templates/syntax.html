@@ -1,33 +1,9 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Syntax for search terms</title>
-    <meta http-equiv="Content-Type" content="text/html" />
-    <meta name="title" content="Knuth Search Engine" />
-    <meta name="creator" content="Lukas Prokop" />
-    <meta name="description" content="Search engine for educational documents" />
-    <meta name="language" content="en" />
-    <meta name="robots" content="all" />
-    <link rel="shortcut icon" href="img/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="static/style.css" />
-    <!-- TODO: RSS feed -->
-  </head>
+{%- extends 'base.html' -%}
 
-  <body>
-    <nav class="subpage">
-      <p id="top">
-        <a href="browse">Browse</a>
-        <a href="list">List</a>
-        <a href="news">Recently uploaded</a>
-        <a href="create">Upload</a>
-        <a href="impressum">Impressum</a>
-        <a href="faq">F.A.Q</a>
-      </p>
-    </nav>
+{%- block title %}Syntax for document search{% endblock -%}
 
-    <article>
-      <h1>Syntax</h1>
+{% block content %}
+      <h1 class="topspace">Syntax</h1>
 
       <p>
         The following examples illustrate normal search patterns.
@@ -36,7 +12,7 @@
         last one.
       </p>
 
-      <table cellpadding="10">
+      <table style="padding:10px">
         <tr>
           <td>word</td>
           <td>Search for "word"</td>
@@ -75,7 +51,7 @@
       </p>
 
       <h3>Search for meta data</h3>
-      <table cellpadding="10">
+      <table style="padding:10px">
         <tr style="font-weight:bold">
           <td>key</td>
           <td>value description</td>
@@ -114,7 +90,7 @@
       </table>
 
       <h3>Search with general information</h3>
-      <table cellpadding="10">
+      <table style="padding:10px">
         <tr style="font-weight:bold">
           <td>key</td>
           <td>value description</td>
@@ -133,7 +109,7 @@
       </table>
 
       <h3 class="in_dev">Specify appearence</h3>
-      <table cellpadding="10">
+      <table style="padding:10px">
         <tr style="font-weight:bold">
           <td>key</td>
           <td>value description</td>
@@ -154,6 +130,4 @@
         </tr>
       </table>
       <p><a href="#top">Back to Top</a></p>
-    </article>
-  </body>
-</html>
+{% endblock %}
