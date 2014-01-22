@@ -211,7 +211,10 @@ def main():
     if query:
         search_query = {'query': {'query_string': {'query': query}}}
         print(es.search(doc_type='doc', size=50, index='knuth', q=query))
-    return render_template('index.html', page='main')
+        # TODO: in which structure are the results returned? supply it to listresults!
+
+        return 
+    return render_template('listresults.html', page='listresults')
 
 
 if __name__ == '__main__':

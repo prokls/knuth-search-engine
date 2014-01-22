@@ -1,23 +1,19 @@
 {%- extends 'base.html' -%}
 
-{%- block title %}Browsing documents{% endblock -%}
+{%- block title %}Search results{% endblock -%}
 
 {% block content %}
-    <h1 class="topspace">Documents</h1>
+    <h1 class="topspace">Search results</h1>
 
     <table>
       <thead>
         <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
       </thead>
       <tbody>
-{%- for doc in documents.values() %}
-{%- set parent = documents[doc.parent|string()] %}
+{%- for document in results.values() %}
         <tr class="doctype_{{ doc.type }}">
           <td>
             <a href="{{ url_for('doc', doc_id=doc.id) }}">{{ doc.title }}</a>
-{%- if parent %}
-            [<a href="{{ url_for('doc', doc_id=parent.id) }}">doc</a>]
-{%- endif %}
           </td>
           <td>
             {{ doc.author }}

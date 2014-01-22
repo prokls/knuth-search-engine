@@ -144,7 +144,7 @@ def _add_metadata_row(doc_id, key, value):
         db.session.add(row)
 
 
-def upload_doc(filepath, doc_id):
+def upload_doc(es_connection, filepath, doc_id):
     """Take document from filepath and store it according to `doc_id`
     so we can retrieve it later. Also register at search engine and
     retrieve further metadata from the document. Returns new filename.
@@ -195,8 +195,21 @@ def upload_doc(filepath, doc_id):
                 except KeyError:
                     pass
 
-    # TODO: add content to search engine, if plain text
-    # TODO: add metadata to search engine
+    # add content to search engine, if plain text
+    if fileext in ['txt', 'tex', 'rst', 'enl']:
+        with open(file_path, 'r') as fp:
+            es.index(index="knuth",
+                     doc_type="plaintext_document",
+                     id=doc_id,
+                     body=fp.read())
+
+    # add metadata to search engine
+    if es.exists(index="knuth", id=doc_id):
+        docu = es.get(index="knuth", id=doc_id)
+        docu['body']['filename'] = filename
+        docu['body']['mimetype'] = mimetype
+        docu['body']['orig_filename'] = filepath.filename
+        es.update(**docu)
 
     db.session.commit()
 
