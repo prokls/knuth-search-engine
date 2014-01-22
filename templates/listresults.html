@@ -3,8 +3,10 @@
 {%- block title %}Search results{% endblock -%}
 
 {% block content %}
-    <h1 class="topspace">Search results</h1>
 
+
+{% if results|length > 0 %}
+    <h1 class="topspace">Search results</h1>
     <table>
       <thead>
         <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
@@ -25,4 +27,5 @@
 {%- endfor %}
       </tbody>
     </table>
+{% endif %}
 {% endblock %}

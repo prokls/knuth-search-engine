@@ -22,15 +22,15 @@ import pdfminer.pdfdocument
 
 UPLOAD_FOLDER = 'data'
 
-DOC_COLUMNS = ['id', 'type', 'title', 'author', 'timestamp', 'parent']
+DOC_COLUMNS = ['id', 'type', 'title', 'author', 'doi', 'timestamp', 'parent']
 METADATA_COLUMNS = ['document', 'key', 'value']
 
 
-def create_document(title='', author='', tags=[], **kwargs):
+def create_document(title='', author='', doi='', tags=[], **kwargs):
     """Define a new document in the database. Returns new ID."""
     # create new document
     new_doc = Document(kwargs.get(u'type', u'doc'), title, author, \
-                       None, kwargs.get(u'parent'))
+                       doi, None, kwargs.get(u'parent'))
     db.session.add(new_doc)
     db.session.commit()  # retrieve new_doc.id
 
@@ -144,7 +144,7 @@ def _add_metadata_row(doc_id, key, value):
         db.session.add(row)
 
 
-def upload_doc(es_connection, filepath, doc_id):
+def upload_doc(es, filepath, doc_id):
     """Take document from filepath and store it according to `doc_id`
     so we can retrieve it later. Also register at search engine and
     retrieve further metadata from the document. Returns new filename.

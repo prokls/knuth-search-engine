@@ -1,5 +1,6 @@
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
+import time
 
 db = SQLAlchemy()
 
@@ -9,17 +10,20 @@ class Document(db.Model):
     type = db.Column(db.String(20))
     title = db.Column(db.String(256))
     author = db.Column(db.String(40))
+    doi = db.Column(db.String(256))
     timestamp = db.Column(db.Integer)
     parent = db.Column(db.Integer)
 
     def __init__(self, type='doc', title='', author='', \
-                 timestamp=None, parent=None):
+                 doi='', timestamp=None, parent=None):
         if not timestamp:
-            timestamp = int(datetime.now().strftime("%s"))
+            #timestamp = int(datetime.now().strftime("%s"))
+            timestamp = int(time.time())
 
         self.type = type
         self.title = title
         self.author = author
+        self.doi = doi
         self.timestamp = timestamp
         self.parent = parent
         

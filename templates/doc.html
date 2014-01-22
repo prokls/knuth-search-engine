@@ -36,6 +36,11 @@
         <dd>{{ author }}</dd>
 {%- endif %}
 
+{%- if doi %}
+      <dt>DOI</dt>
+        <dd>{{ doi }}</dd>
+{%- endif %}
+
 {%- if type %}
       <dt>Type</dt>
         <dd>{{ type }}</dd>
@@ -54,7 +59,7 @@
     <h3>Attachments</h3>
     <ul style="text-align:left">
 {%- for attach in attachments %}
-      <li><a href="{{ url_for('doc', doc_id=attach.id) }}">“{{ attach.title }}”</a></li>
+      <li><a href="{{ url_for('doc', doc_id=attach.id) }}">â€œ{{ attach.title }}â€�</a></li>
 {%- endfor %}
     </ul>
 {%- endif %}

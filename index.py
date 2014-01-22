@@ -68,6 +68,7 @@ def normalize_data(form, files):
       'id' : int(form['doc_id']),
       'title' : form['doc_title'],
       'author' : form['doc_author'],
+      'doi'  : form['doc_doi'], 
       'tags' : [tag for tag in form['doc_tags'].split() if tag],
       'doc' : doc_file,
       'attachment' : {
@@ -92,10 +93,10 @@ def create():
 
         if data['id'] == 0:
             doc_id = document.create_document(data['title'], \
-              data['author'], data['tags'])
+              data['author'], data['doi'], data['tags'])
         else:
             d = {}
-            whitelist = ['id', 'title', 'author']
+            whitelist = ['id', 'title', 'author', 'doi']
             for key in whitelist:
                 if data[key]:
                     d[key] = data[key]
@@ -103,7 +104,7 @@ def create():
             doc_id = data['id']
 
         if data['doc']:
-            filename = document.upload_doc(data['doc'], doc_id)
+            filename = document.upload_doc(es, data['doc'], doc_id)
         else:
             filename = document.get_filename(doc_id)
 
@@ -112,7 +113,7 @@ def create():
             at = document.create_attachment(doc_id,
                     data['attachment']['title'],
                     data['attachment']['author'], data['tags'])
-            attach = document.upload_doc(data['attachment']['doc'], at)
+            attach = document.upload_doc(es, data['attachment']['doc'], at)
 
         doc = document.retrieve_document(doc_id)
     else:
@@ -153,8 +154,14 @@ def delete(doc_id, methods=['DELETE']):
 
 
 def make_feed_body(doc):
+    
+    doi = ''
+    if(doc.doi != None):
+        doi = doc.doi
+    
     feed_body = u'Title: ' + doc.title + \
                  '<br />Author: ' + doc.author + \
+                 '<br />DOI: ' + doi + \
                  '<br />Upload: ' + doc.getFormatDateString()
     return feed_body
 
@@ -210,11 +217,17 @@ def main():
     query = request.args.get('q')
     if query:
         search_query = {'query': {'query_string': {'query': query}}}
-        print(es.search(doc_type='doc', size=50, index='knuth', q=query))
+        print(es.search(doc_type='doc', size=50, index='knuth', body=query))
         # TODO: in which structure are the results returned? supply it to listresults!
-
+ 
         return 
-    return render_template('listresults.html', page='listresults')
+    
+    search_query = {'query': {'match_all': {}}}
+    print(es.search(index='knuth', doc_type='doc', size=50, body=query))
+    
+    return render_template('listresults.html', **{'results' : {}, 'page' : 'listresults'})
+    #return render_template('index.html', page='main')
+
 
 
 if __name__ == '__main__':

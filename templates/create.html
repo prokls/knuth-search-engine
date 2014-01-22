@@ -25,6 +25,10 @@
             <td>Author:</td>
             <td><input type="text" name="doc_author" maxsize="40" value="{{ author }}" /></td>
           </tr>
+          <tr>
+            <td>DOI:</td>
+            <td><input type="text" name="doc_doi" maxsize="256" value="{{ doi }}" /></td>
+          </tr>
           <!-- TODO: license -->
           <tr>
             <td>Tags: <br /> <span style="font-size:small">(whitespace-separated)</span></td>
@@ -39,7 +43,7 @@
           <table style="margin-bottom:10px" class="colored_table">
 {%- for attach in attachments %}
             <tr style="margin-top:5px">
-              <td>{% if attach.title %}“{{ attach.title }}”{% endif %}</td><td>{{ attach.author }}</td>
+              <td>{% if attach.title %}â€œ{{ attach.title }}â€�{% endif %}</td><td>{{ attach.author }}</td>
             </tr>
 {%- endfor %}
           </table>
