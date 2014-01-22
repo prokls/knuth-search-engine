@@ -13,8 +13,11 @@ from database import db, Document, Metadata
 
 import os.path
 import datetime
-import pdfminer
 import mimetypes
+
+import pdfminer
+import pdfminer.pdfparser
+import pdfminer.pdfdocument
 
 UPLOAD_FOLDER = 'data'
 
@@ -140,6 +143,13 @@ def get_filename(doc_id):
     return None
 
 
+def _add_metadata_row(doc_id, key, value):
+    """Add entry to table Metadata"""
+    if key and value:
+        row = Metadata(doc_id, key, value)
+        db.session.add(row)
+
+
 def upload_doc(filepath, doc_id):
     """Take document from filepath and store it according to `doc_id`
     so we can retrieve it later. Also register at search engine and
@@ -171,7 +181,22 @@ def upload_doc(filepath, doc_id):
         mimetype_row = Metadata(doc_id, 'mimetype', mimetype)
         db.session.add(mimetype_row)
 
-    # TODO: retrieve metadata using pdfminer, if PDF
+    # retrieve metadata using pdfminer, if PDF
+    if mimetype == 'application/pdf':
+        with open(file_path, 'rb') as fp:
+            parser = pdfminer.pdfparser.PDFParser(fp)
+            doc = pdfminer.pdfdocument.PDFDocument(parser)
+            parser.set_document(doc)
+            doc.initialize()
+
+            fields = ['Producer', 'Creator', 'Title', 'Keywords', 'Subject']
+            for key in fields:
+                try:
+                    keyname = 'pdf.' + key.lower()
+                    _add_metadata_row(doc_id, keyname, doc.info[0][key])
+                except KeyError:
+                    pass
+
     # TODO: add content to search engine, if plain text
     # TODO: add metadata to search engine
 
