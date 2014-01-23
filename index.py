@@ -136,11 +136,19 @@ def create():
 @app.route('/list/<int:page>')
 def list(page=0):
     # 1. request data from DB
-    documents = Document.query.all()
+    documents = Document.query.filter(Document.parent == None).all()
+    attachments = Document.query.filter(Document.parent != None).all()
     
     document_dict = {}
     for doc in documents:
-        document_dict[str(doc.id)] = doc
+        document_dict[str(doc.id)] = {'document' : doc, 'attachments' : []}
+    
+    for attachment in attachments:
+        doc_dict_entry = document_dict[str(attachment.parent)]
+        print doc_dict_entry
+        doc_dict_entry['attachments'].append(attachment)
+    
+    print document_dict    
         
     # 2. provide data to template engine
     return render_template('list.html', **{'documents' : document_dict, 'page' : 'list'})

@@ -58,6 +58,10 @@ def retrieve_document(doc_id, with_attachments=True):
         data[field] = getattr(doc, field)
     data['id'] = int(data['id'])
 
+    if doc.parent:
+        parent_doc = Document.query.filter_by(id=doc.parent).first()
+        data['parent_title'] = parent_doc.title
+
     # retrieve metadata
     for entry in metadata:
         if entry.key == 'tag':

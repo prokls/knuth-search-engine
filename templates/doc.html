@@ -55,6 +55,13 @@
 {%- endfor %}
     </dl>
 
+{%- if parent %}
+    <h3>Attached to</h3>
+    <ul style="text-align:left">
+      <li><a href="{{ url_for('doc', doc_id=parent) }}">â€œ{{ parent_title }}â€�</a></li>
+    </ul>
+{%- endif %}
+
 {%- if attachments %}
     <h3>Attachments</h3>
     <ul style="text-align:left">

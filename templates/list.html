@@ -10,14 +10,16 @@
         <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
       </thead>
       <tbody>
-{%- for doc in documents.values() %}
-{%- set parent = documents[doc.parent|string()] %}
+{%- for document_data in documents.values() %}
+{%- set doc = document_data.document %}
+{%- set attachments = document_data.attachments %}
         <tr class="doctype_{{ doc.type }}">
           <td>
             <a href="{{ url_for('doc', doc_id=doc.id) }}">{{ doc.title }}</a>
-{%- if parent %}
-            [<a href="{{ url_for('doc', doc_id=parent.id) }}">doc</a>]
-{%- endif %}
+
+            {% for attachment in attachments %}   
+              [<a href="{{ url_for('doc', doc_id=attachment.id) }}">{{attachment.type}}</a>]         
+            {% endfor %}            
           </td>
           <td>
             {{ doc.author }}
