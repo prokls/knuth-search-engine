@@ -74,7 +74,7 @@ def normalize_data(form, files):
       'attachment' : {
         'title' : form['attach_title'],
         'author' : form['attach_author'],
-        'doi' : form['attach_doi'],
+        'doi' : '',
         'doc' : attach_file
       }
     }
