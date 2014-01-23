@@ -74,6 +74,7 @@ def normalize_data(form, files):
       'attachment' : {
         'title' : form['attach_title'],
         'author' : form['attach_author'],
+        'doi' : form['attach_doi'],
         'doc' : attach_file
       }
     }
@@ -112,7 +113,9 @@ def create():
         if data['attachment']['doc']:
             at = document.create_attachment(doc_id,
                     data['attachment']['title'],
-                    data['attachment']['author'], data['tags'])
+                    data['attachment']['author'],
+                    data['attachment']['doi'],
+                    data['tags'])
             attach = document.upload_doc(es, data['attachment']['doc'], at)
 
         doc = document.retrieve_document(doc_id)

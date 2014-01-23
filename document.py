@@ -119,9 +119,9 @@ def delete_document(doc_id):
             db.session.delete(md)  # delete metadata
 
 
-def create_attachment(parent, title="", author="", tags=[]):
+def create_attachment(parent, title="", author="", doi='', tags=[]):
     """Create a new attachment. Returns new ID."""
-    return create_document(title, author, tags, parent=parent, type='attach')
+    return create_document(title, author, doi, tags, parent=parent, type='attach')
 
 
 def get_filename(doc_id):
