@@ -128,6 +128,7 @@ def create():
     if not op or op == u'Attach':
         return render_template('create.html', **doc)
     else:
+        document.index_document_by_id(es, doc['id'])
         return redirect(url_for('doc', doc_id=doc['id']))
 
 
@@ -146,9 +147,7 @@ def list(page=0):
     for attachment in attachments:
         doc_dict_entry = document_dict[str(attachment.parent)]
         print doc_dict_entry
-        doc_dict_entry['attachments'].append(attachment)
-    
-    print document_dict    
+        doc_dict_entry['attachments'].append(attachment) 
         
     # 2. provide data to template engine
     return render_template('list.html', **{'documents' : document_dict, 'page' : 'list'})
@@ -226,19 +225,26 @@ def download(filename):
 @app.route('/search')
 def main():
     query = request.args.get('q')
+    results = {}
+    
     if query:
+        print query
         search_query = {'query': {'query_string': {'query': query}}}
-        print(es.search(doc_type='doc', size=50, index='knuth', body=query))
-        # TODO: in which structure are the results returned? supply it to listresults!
- 
-        return 
-    
-    search_query = {'query': {'match_all': {}}}
-    print(es.search(index='knuth', doc_type='doc', size=50, body=query))
-    
-    return render_template('listresults.html', **{'results' : {}, 'page' : 'listresults'})
-    #return render_template('index.html', page='main')
+        
+        search_result = es.search(index='knuth', doc_type='document', size=50, body=search_query)
+       
+        hits = search_result['hits']['hits']
+        
+        for hit in hits:
+            document_id = hit['_id']
+            d = Document.query.filter_by(id=document_id).first()
+            results[str(document_id)] = d
+            
+            
+    print results
 
+    return render_template('listresults.html', **{'results' : results, 'page' : 'listresults'})
+    #return render_template('index.html', page='main')
 
 
 if __name__ == '__main__':

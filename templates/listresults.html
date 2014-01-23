@@ -12,7 +12,7 @@
         <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
       </thead>
       <tbody>
-{%- for document in results.values() %}
+{%- for doc in results.values() %}
         <tr class="doctype_{{ doc.type }}">
           <td>
             <a href="{{ url_for('doc', doc_id=doc.id) }}">{{ doc.title }}</a>

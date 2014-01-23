@@ -219,3 +219,32 @@ def upload_doc(es, filepath, doc_id):
     db.session.commit()
 
     return new_filename
+
+
+def index_document_by_id(es, doc_id):
+    doc = Document.query.filter_by(id=doc_id).first()
+    meta = Metadata.query.filter_by(document=doc_id).all()
+    
+    return index_document(es, doc, meta)
+
+def index_document(es, document, metadata):
+    meta = {}
+    tags = []
+    
+    for md in metadata:
+        if md.key == 'tag':
+            tags.append(md.value)
+        else:
+            meta[md.key] = md.value
+    
+    index_body = {}
+    index_body['type'] = document.type;   
+    index_body['author'] = document.author;
+    index_body['title'] = document.title;
+    index_body['doi'] = document.doi;
+    index_body['timestamp'] = document.timestamp
+    index_body['meta'] = meta;
+    index_body['tags'] = tags;
+    
+    res = es.index(index='knuth', doc_type='document', id=document.id, body=index_body)
+    return res

@@ -21,7 +21,7 @@
 
     <div class="tags">
 {%- for tag in tags %}
-      <span class="tag">{{ tag }}</span>
+     <a href="{{ url_for('main') }}?q={{ tag }}"><span class="tag">{{ tag }}</span></a>
 {%- endfor %}
     </div>
 
