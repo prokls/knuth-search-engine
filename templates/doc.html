@@ -1,10 +1,10 @@
-{%- set page = 'doc' -%}
 {%- extends 'base.html' -%}
 
 {%- block title %}Document #{{ id }}{% endblock -%}
 
-{%- block content %}
+{%- block content -%}
     <h1 class="topspace">Document</h1>
+{% if filename %}
      <a href="{{ url_for('download', filename=filename) }}" class="noborderlink">
 {%- if filename.endswith('.bib') %}
       <img src="{{ url_for('static', filename='img/ft/bib.svg') }}" alt="BibTeX file" class="filetype" />
@@ -18,10 +18,11 @@
       <img src="{{ url_for('static', filename='img/ft/generic.svg') }}" alt="Generic file" class="filetype" />
 {%- endif %}
      </a>
+{% endif %}
 
     <div class="tags">
 {%- for tag in tags %}
-     <a href="{{ url_for('main') }}?q={{ tag }}"><span class="tag">{{ tag }}</span></a>
+     <a href="{{ url_for('main') }}?q={{ tag }}" class="noborderlink"><span class="tag">{{ tag }}</span></a>
 {%- endfor %}
     </div>
 
@@ -58,7 +59,7 @@
 {%- if parent %}
     <h3>Attached to</h3>
     <ul style="text-align:left">
-      <li><a href="{{ url_for('doc', doc_id=parent) }}">â€œ{{ parent_title }}â€�</a></li>
+      <li><a href="{{ url_for('doc', doc_id=parent) }}">“{{ parent_title }}”</a></li>
     </ul>
 {%- endif %}
 
@@ -66,7 +67,7 @@
     <h3>Attachments</h3>
     <ul style="text-align:left">
 {%- for attach in attachments %}
-      <li><a href="{{ url_for('doc', doc_id=attach.id) }}">â€œ{{ attach.title }}â€�</a></li>
+      <li><a href="{{ url_for('doc', doc_id=attach.id) }}">“{{ attach.title }}”</a></li>
 {%- endfor %}
     </ul>
 {%- endif %}
