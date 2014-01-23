@@ -126,10 +126,11 @@ def create_attachment(parent, title="", author="", doi='', tags=[]):
 
 def get_filename(doc_id):
     """Retrieve the filename of document with id=`doc_id`"""
-    md = Metadata.query.filter_by(key='filename').first()
+  
+    md = Metadata.query.filter_by(key='filename', document=doc_id).first()
     if md:
         return md.value
-
+    
     for filename in os.listdir(UPLOAD_FOLDER):
         if filename.startswith(str(doc_id) + '.'):
             return filename
