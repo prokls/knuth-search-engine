@@ -18,14 +18,14 @@
             <a href="{{ url_for('doc', doc_id=doc.id) }}">{{ doc.title }}</a>
 
             {% for attachment in attachments %}   
-              [<a href="{{ url_for('doc', doc_id=attachment.id) }}">{{attachment.type}}</a>]         
+              [<a href="{{ url_for('doc', doc_id=attachment.id) }}">{{ attachment.type }}</a>]         
             {% endfor %}            
           </td>
           <td>
             {{ doc.author }}
           </td>
           <td>
-            {{ doc.getFormatDateString() }}
+            {{ doc.get_format_date_string() }}
           </td>
         </tr>
 {%- endfor %}

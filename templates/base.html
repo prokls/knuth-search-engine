@@ -35,13 +35,13 @@
 {%- block nav %}
     <nav{% if page != 'main' %} class="subpage"{% endif %}>
       <p id="top">
-{% if page != 'main'      %}         <a href="{{ url_for('main') }}">Search</a>{% endif %}
-{% if page != 'list'      %}         <a href="{{ url_for('list') }}">List</a>{% endif %}
-{% if page != 'news'      %}         <a href="{{ url_for('news') }}">News</a>{% endif %}
-{% if page != 'info'      %}         <a href="{{ url_for('info') }}">Syntax</a>{% endif %}
-{% if page != 'create'    %}         <a href="{{ url_for('create') }}">Upload</a>{% endif %}
-{% if page != 'impressum' %}         <a href="{{ url_for('impressum') }}">Impressum</a>{% endif %}
-{% if page != 'faq'       %}         <a href="{{ url_for('faq') }}">F.A.Q.</a>{% endif %}
+{% if page != 'listresults' %}         <a href="{{ url_for('main') }}">Search</a>{% endif %}
+{% if page != 'listing'     %}         <a href="{{ url_for('listing') }}">List</a>{% endif %}
+{% if page != 'news'        %}         <a href="{{ url_for('news') }}">News</a>{% endif %}
+{% if page != 'info'        %}         <a href="{{ url_for('info') }}">Syntax</a>{% endif %}
+{% if page != 'create'      %}         <a href="{{ url_for('create') }}">Upload</a>{% endif %}
+{% if page != 'impressum'   %}         <a href="{{ url_for('impressum') }}">Impressum</a>{% endif %}
+{% if page != 'faq'         %}         <a href="{{ url_for('faq') }}">F.A.Q.</a>{% endif %}
       </p>
     </nav>
 {%- endblock %}

@@ -7,13 +7,12 @@
 
     Document handling in knuth document repository.
 
-    (C) 2014, Lukas Prokop, Andi
+    (C) 10.12.25, 2013, 2014, Lukas Prokop, Andi
 """
 
 from database import db, Document, Metadata
 
 import os.path
-import datetime
 import mimetypes
 
 import pdfminer
@@ -29,7 +28,7 @@ METADATA_COLUMNS = ['document', 'key', 'value']
 def create_document(title='', author='', doi='', tags=[], **kwargs):
     """Define a new document in the database. Returns new ID."""
     # create new document
-    new_doc = Document(kwargs.get(u'type', u'doc'), title, author, \
+    new_doc = Document(kwargs.get(u'type', u'doc'), title, author,
                        doi, None, kwargs.get(u'parent'))
     db.session.add(new_doc)
     db.session.commit()  # retrieve new_doc.id
@@ -50,7 +49,7 @@ def retrieve_document(doc_id, with_attachments=True):
     """
     doc = Document.query.filter_by(id=doc_id).first()
     metadata = Metadata.query.filter_by(document=doc_id).all()
-    data = {'tags' : [], 'attachments' : [], 'meta': {}}
+    data = {'tags': [], 'attachments': [], 'meta': {}}
     children = set([])
 
     # retrieve document data
@@ -67,7 +66,7 @@ def retrieve_document(doc_id, with_attachments=True):
         if entry.key == 'tag':
             data['tags'].append(entry.value)
             continue
-        if not data.has_key(entry.key):
+        if entry.key not in data:
             data['meta'][entry.key] = entry.value
 
     # retrieve children
@@ -125,16 +124,18 @@ def delete_document(doc_id):
 
 def create_attachment(parent, title="", author="", doi='', tags=[]):
     """Create a new attachment. Returns new ID."""
-    return create_document(title, author, doi, tags, parent=parent, type='attach')
+    return create_document(title, author, doi, tags,
+        parent=parent, type='attach'
+    )
 
 
 def get_filename(doc_id):
     """Retrieve the filename of document with id=`doc_id`"""
-  
+
     md = Metadata.query.filter_by(key='filename', document=doc_id).first()
     if md:
         return md.value
-    
+
     for filename in os.listdir(UPLOAD_FOLDER):
         if filename.startswith(str(doc_id) + '.'):
             return filename
@@ -188,7 +189,8 @@ def upload_doc(es, filepath, doc_id):
             parser.set_document(doc)
             doc.initialize()
 
-            fields = [u'Producer', u'Creator', u'Title', u'Keywords', u'Subject']
+            fields = [u'Producer', u'Creator', u'Title',
+                      u'Keywords', u'Subject']
             for key in fields:
                 try:
                     keyname = u'pdf.' + key.lower()
@@ -224,27 +226,29 @@ def upload_doc(es, filepath, doc_id):
 def index_document_by_id(es, doc_id):
     doc = Document.query.filter_by(id=doc_id).first()
     meta = Metadata.query.filter_by(document=doc_id).all()
-    
+
     return index_document(es, doc, meta)
+
 
 def index_document(es, document, metadata):
     meta = {}
     tags = []
-    
+
     for md in metadata:
         if md.key == 'tag':
             tags.append(md.value)
         else:
             meta[md.key] = md.value
-    
+
     index_body = {}
-    index_body['type'] = document.type;   
-    index_body['author'] = document.author;
-    index_body['title'] = document.title;
-    index_body['doi'] = document.doi;
+    index_body['type'] = document.type
+    index_body['author'] = document.author
+    index_body['title'] = document.title
+    index_body['doi'] = document.doi
     index_body['timestamp'] = document.timestamp
-    index_body['meta'] = meta;
-    index_body['tags'] = tags;
-    
-    res = es.index(index='knuth', doc_type='document', id=document.id, body=index_body)
+    index_body['meta'] = meta
+    index_body['tags'] = tags
+
+    res = es.index(index='knuth', doc_type='document',
+                   id=document.id, body=index_body)
     return res
