@@ -3,7 +3,7 @@ knuth
 
 :course:        Digital libraries
 :title:         knuth
-:students:      Andi, Lukas Prokop
+:students:      Andreas Schulhofer, Lukas Prokop
 
 Web application for document storage, indexing and retrieval.
 
