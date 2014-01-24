@@ -38,10 +38,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 
 db.init_app(app)
 
-FEED_BODY = u'''Title: {:title}<br />
-Author: {:author}<br />
-DOI: {:doi}<br />
-Upload: {:upload}'''
+FEED_BODY = u'''Title: {title:}<br />
+Author: {author:}<br />
+DOI: {doi:}<br />
+Upload: {upload:}'''
 
 
 # routing
@@ -106,6 +106,7 @@ def create():
         if data['id'] == 0:
             doc_id = document.create_document(data['title'],
               data['author'], data['doi'], data['tags'])
+            document.index_document_by_id(es, doc_id)
         else:
             d = {}
             whitelist = ['id', 'title', 'author', 'doi']
@@ -127,6 +128,7 @@ def create():
                     data['attachment']['author'],
                     data['attachment']['doi'],
                     data['tags'])
+            document.index_document_by_id(es, at)
             attach = document.upload_doc(es, data['attachment']['doc'], at)
 
         docu = document.retrieve_document(doc_id)
@@ -139,7 +141,6 @@ def create():
     if not op or op == u'Attach':
         return render_template('create.html', **docu)
     else:
-        document.index_document_by_id(es, docu['id'])
         return redirect(url_for('doc', doc_id=docu['id']))
 
 
@@ -147,22 +148,16 @@ def create():
 @app.route('/list')
 def listing(page=0):
     """Create a list of all available documents"""
-    # 1. request data from DB
-    documents = Document.query.filter(Document.parent is None).all()
-    attachments = Document.query.filter(Document.parent is not None).all()
+    # 1. request all documents from DB
+    documents = Document.query.order_by(Document.timestamp.desc()).all()
+    all_docs = []
 
-    document_dict = {}
     for doc in documents:
-        document_dict[str(doc.id)] = {'document': doc, 'attachments': []}
-
-    for attachment in attachments:
-        doc_dict_entry = document_dict[str(attachment.parent)]
-        print doc_dict_entry
-        doc_dict_entry['attachments'].append(attachment)
+        all_docs.append(document.retrieve_document(doc.id))
 
     # 2. provide data to template engine
     return render_template('list.html',
-        **{'documents': document_dict, 'page': 'listing'}
+        documents=all_docs, page='listing'
     )
 
 
@@ -233,7 +228,7 @@ def doc(doc_id):
     if not docu:
         abort(404)
 
-    return render_template('doc.html', **docu)
+    return render_template('doc.html', page='doc', **docu)
 
 
 @app.route('/data/<filename>')

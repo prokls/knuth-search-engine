@@ -22,8 +22,8 @@ class Document(db.Model):
     __tablename__ = "documents"
 
     # table columns
-    doc_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    doc_type = db.Column(db.String(20))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    type = db.Column(db.String(20))
     title = db.Column(db.String(256))
     author = db.Column(db.String(40))
     doi = db.Column(db.String(256))
@@ -35,7 +35,7 @@ class Document(db.Model):
         if not timestamp:
             timestamp = int(time.time())
 
-        self.doc_type = type
+        self.type = type
         self.title = title
         self.author = author
         self.doi = doi
@@ -43,13 +43,19 @@ class Document(db.Model):
         self.parent = parent
 
     def __repr__(self):
-        return self.title
+        return 'Document({})'.format(self.title)
 
     def get_date(self):
+        if self.timestamp == 0:
+            return None
         return datetime.utcfromtimestamp(self.timestamp)
 
     def get_format_date_string(self):
-        return self.get_date().strftime('%Y-%m-%d')
+        dt = self.get_date()
+        if dt:
+            return dt.strftime('%Y-%m-%d')
+        else:
+            return ''
 
 
 class Metadata(db.Model):

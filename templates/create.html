@@ -19,20 +19,20 @@
         <table id="metadata">
           <tr>
             <td>Title:</td>
-            <td><input type="text" name="doc_title" maxsize="256" value="{{ title }}" /></td>
+            <td><input type="text" name="doc_title" maxlength="256" value="{{ title }}" style="font-family:sans-serif" /></td>
           </tr>
           <tr>
             <td>Author:</td>
-            <td><input type="text" name="doc_author" maxsize="40" value="{{ author }}" /></td>
+            <td><input type="text" name="doc_author" maxlength="40" value="{{ author }}" style="font-family:sans-serif" /></td>
           </tr>
           <tr>
             <td>DOI:</td>
-            <td><input type="text" name="doc_doi" maxsize="256" value="{{ doi }}" /></td>
+            <td><input type="text" name="doc_doi" maxlength="256" value="{{ doi }}" style="font-family:sans-serif" /></td>
           </tr>
           <!-- TODO: license -->
           <tr>
             <td>Tags: <br /> <span style="font-size:small">(whitespace-separated)</span></td>
-            <td><input type="text" name="doc_tags" value="{{ tags|join(' ') }}" /></td>
+            <td><input type="text" name="doc_tags" value="{{ tags|join(' ') }}" style="font-family:sans-serif" /></td>
           </tr>
         </table>
 
@@ -43,15 +43,15 @@
           <table style="margin-bottom:10px" class="colored_table">
 {%- for attach in attachments %}
             <tr style="margin-top:5px">
-              <td>{% if attach.title %}â€œ{{ attach.title }}â€�{% endif %}</td><td>{{ attach.author }}</td>
+              <td>{% if attach.title %}“{{ attach.title }}”{% endif %}</td><td>{{ attach.author }}</td>
             </tr>
 {%- endfor %}
           </table>
 {%- endif %}
 
           <div class="attached_doc">
-            <input type="text" name="attach_title" maxsize="256" placeholder="title..." style="width:30%" />
-            <input type="text" name="attach_author" maxsize="40" placeholder="author..." style="width:25%" />
+            <input type="text" name="attach_title" maxlength="256" placeholder="title …" style="width:30%" />
+            <input type="text" name="attach_author" maxlength="40" placeholder="author …" style="width:25%" />
             <input type="file" name="attach_doc" style="width:35%" />
           </div>
           <p style="text-align: center">

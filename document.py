@@ -12,6 +12,7 @@
 
 from database import db, Document, Metadata
 
+import re
 import os.path
 import mimetypes
 
@@ -60,6 +61,7 @@ def retrieve_document(doc_id, with_attachments=True):
     if doc.parent:
         parent_doc = Document.query.filter_by(id=doc.parent).first()
         data['parent_title'] = parent_doc.title
+    data['format_date'] = doc.get_format_date_string()
 
     # retrieve metadata
     for entry in metadata:
@@ -133,6 +135,7 @@ def get_filename(doc_id):
     """Retrieve the filename of document with id=`doc_id`"""
 
     md = Metadata.query.filter_by(key='filename', document=doc_id).first()
+    print(doc_id, md)
     if md:
         return md.value
 
@@ -157,7 +160,7 @@ def upload_doc(es, filepath, doc_id):
     """
     # retrieve file extension & mime type
     if '.' in filepath.filename:
-        fileext = filepath.filename.rsplit('.', 1)[1]
+        fileext = filepath.filename.lower().rsplit('.', 1)[1]
     else:
         fileext = str(doc_id)
 
@@ -195,28 +198,31 @@ def upload_doc(es, filepath, doc_id):
                 try:
                     keyname = u'pdf.' + key.lower()
                     try:
-                        value = doc.info[0][key].decode('utf-16')
+                        value = str(doc.info[0][key])
                     except UnicodeDecodeError:
                         continue
                     _add_metadata_row(doc_id, keyname, value)
+                    es.update(index="knuth", doc_type="document",
+                        id=doc_id, body={'doc': {'meta': {keyname: value}}})
                 except KeyError:
                     pass
 
     # add content to search engine, if plain text
-    if fileext in ['txt', 'tex', 'rst', 'enl']:
+    if fileext in ['txt', 'tex', 'rst', 'enl', 'bib']:
         with open(file_path, 'r') as fp:
-            es.index(index="knuth",
-                     doc_type="plaintext_document",
-                     id=doc_id,
-                     body=fp.read())
+            content = fp.read().decode('utf-8')
+            content = re.sub('\W', ' ', content).encode('utf-8')
+            es.update(index="knuth", doc_type="document",
+                id=doc_id, body={'doc': {'content': content}})
 
     # add metadata to search engine
     if es.exists(index="knuth", id=doc_id):
-        docu = es.get(index="knuth", id=doc_id)
-        docu['body']['filename'] = filename
-        docu['body']['mimetype'] = mimetype
-        docu['body']['orig_filename'] = filepath.filename
-        es.update(**docu)
+        es.update(index="knuth", doc_type="document",
+            id=doc_id, body={'doc': {
+                'filename': new_filename,
+                'mimetype': mimetype,
+                'orig_filename': filepath.filename
+            }})
 
     db.session.commit()
 

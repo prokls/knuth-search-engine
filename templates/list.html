@@ -10,23 +10,25 @@
         <tr><th>Title</th><th>Author</th><th>Upload</th></tr>
       </thead>
       <tbody>
-{%- for document_data in documents.values() %}
-{%- set doc = document_data.document %}
-{%- set attachments = document_data.attachments %}
+{%- for doc in documents %}
         <tr class="doctype_{{ doc.type }}">
           <td>
             <a href="{{ url_for('doc', doc_id=doc.id) }}">{{ doc.title }}</a>
 
-            {% for attachment in attachments %}   
-              [<a href="{{ url_for('doc', doc_id=attachment.id) }}">{{ attachment.type }}</a>]         
-            {% endfor %}            
+{% for attachment in doc.attachments %}
+              [<a href="{{ url_for('doc', doc_id=attachment.id) }}">{{ attachment.type }}</a>]
+{% endfor %}
           </td>
+{% if doc.author %}
           <td>
             {{ doc.author }}
           </td>
+{% endif %}
+{% if doc.format_date %}
           <td>
-            {{ doc.get_format_date_string() }}
+            {{ doc.format_date }}
           </td>
+{% endif %}
         </tr>
 {%- endfor %}
       </tbody>

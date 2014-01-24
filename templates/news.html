@@ -7,7 +7,7 @@
     <h1 class="topspace">{% print feed['feed']['title'] %}</h1>
     <a href="{{ url_for('feed') }}">Feed</a>
     <div>
-      {% for entry in feed['entries'] %}
+{% for entry in feed['entries'] %}
         <article>
         <h1>
           <a href="{{ entry['link'] }}">{{ entry['title'] }}</a><br />
@@ -17,7 +17,7 @@
           {{ entry['content'][0]['value']|safe }}
         </p>
         </article>
-      {% endfor %}
+{% endfor %}
     </div>
 
 {% endblock%}
